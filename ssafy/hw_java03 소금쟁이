@@ -1,111 +1,80 @@
 package com.ssafy.algo;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Solution22 {
-	public static void main(String[] args) {
-		
-		Scanner sc=new Scanner(System.in);
-		int T=sc.nextInt(); //테케
-		String[] ans=new String[T];	//테케별 정답 저장.
-		for(int  tc=0; tc<T; tc++) {
-			int n=sc.nextInt(); //배열 크기 입력.
-			int s=sc.nextInt();	//소금쟁이 수 입력.
-			int[][] map = new int[n][n];			
-			int[][] sol= new int[s][3];	//소금쟁이별로 시작 행,열,방향 저장.
-			boolean[] isDead = new boolean[s];	//소금쟁이가 죽었는지 체크하는 배열. 
-			for(int i=0; i<s; i++) {	//소금쟁이 수 만큼 반복. sol 입력받자.
-				sol[i][0]=sc.nextInt();
-				sol[i][1]=sc.nextInt();
-				sol[i][2]=sc.nextInt();
-			}
-			for(int i=0; i<s; i++) {	//소금쟁이별로 뛰기 시작.
-				if(map[sol[i][0]][sol[i][1]]==1) {	//시작 위치에 이미 다른 소금쟁이가 있다면 죽는다.
-					isDead[i]=true;	//죽음. 다음 소금쟁이로 ...
-					continue;	
-				}
-				else {	//방향대로 3칸, 2칸, 1칸 뛰자.
-					int curx=sol[i][0];	//현재 x좌표
-					int cury=sol[i][1];	//현재 y좌표
-					int dir=sol[i][2];	//점프 방향
-					int count = 3;	//이번에 뛸 수.
-					
-					if(dir==1) {	//방향이 '상' 
-						for(int j=0; j<3; j++) {	//세번 뛴다.
-							if(curx-count<0 || map[curx-count][cury]==1) {//밖으로 나갔거나 다른 소금쟁이가 이미 있다면
-								isDead[i]=true;	//더이상 안뜀. 죽음.
-								break;
-							}
-							else if(j==2) {	//마지막 점프였고 안죽었다면
-								map[curx-count][cury]=1;	//머물러있는다.
-							}
-							else {	
-								curx-=count; //현재 위치 변경
-								count--;	//count줄음. 다음 점프
-							}
-							
-						}
-					}
-					else if(dir==2) {	//하
-						for(int j=0; j<3; j++) {	//세번 뛴다.
-							if(curx+count>=n || map[curx+count][cury]==1) {//밖으로 나갔거나 다른 소금쟁이가 이미 있다면
-								isDead[i]=true;	//더이상 안뜀. 죽음.
-								break;
-							}
-							else if(j==2) {	//마지막 점프였고 안죽었다면
-								map[curx+count][cury]=1;	//머물러있는다.
-							}
-							else {	//아니면 계속 점프.
-								curx+=count; //현재 위치 변경
-								count--;	//count줄음
-							}
-						}
-					}
-					else if(dir==3) {	//좌
-						for(int j=0; j<3; j++) {	//세번 뛴다.
-							if(cury-count<0 || map[curx][cury-count]==1) {//밖으로 나갔거나 다른 소금쟁이가 이미 있다면
-								isDead[i]=true;	//더이상 안뜀. 죽음.
-								break;
-							}
-							else if(j==2) {	//마지막 점프였고 안죽었다면
-								map[curx][cury-count]=1;	//머물러있는다.
-							}
-							else {	//아니면 계속 점프.
-								cury-=count;
-								count--;	//count줄음
-							}
-						}
-					}
-					else {	//dir==4 우
-						for(int j=0; j<3; j++) {	//세번 뛴다.
-							if(cury+count>=n || map[curx][cury]==1) {//밖으로 나갔거나 다른 소금쟁이가 이미 있다면
-								isDead[i]=true;	//더이상 안뜀. 죽음.
-								break;
-							}
-							else if(j==2) {	//마지막 점프였고 안죽었다면
-								map[curx][cury+count]=1;	//머물러있는다.
-							}
-							else {	//아니면 계속 점프.
-								cury+=count;
-								count--;	//count줄음
-							}
-						}
-					}
-				} 
-			}
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine()); // 테케
+		String[] ans = new String[T]; // 테케별 정답 저장.
+		for (int tc = 0; tc < T; tc++) {
+			StringTokenizer st1 = new StringTokenizer(br.readLine()," ");
+			int n = Integer.parseInt(st1.nextToken()); // 배열 크기 입력.
+			int s = Integer.parseInt(st1.nextToken()); // 소금쟁이 수 입력.
+			int[][] map = new int[n][n];
+			int[][] sol = new int[s][3]; // 소금쟁이별로 시작 행,열,방향 저장.
+			boolean[] isDead = new boolean[s]; // 소금쟁이가 죽었는지 체크하는 배열.
 			
-			int live=0;
-			for(int i=0; i<s; i++) {
-				if(isDead[i]==false) {//살아있는 소금쟁이 발견
-					live++; 
+			
+			
+			for (int i = 0; i < s; i++) { // 소금쟁이 수 만큼 반복. sol 입력받자.
+				StringTokenizer st2 = new StringTokenizer(br.readLine()," ");	//구분자:공백
+				sol[i][0] = Integer.parseInt(st2.nextToken());
+				sol[i][1] = Integer.parseInt(st2.nextToken());
+				sol[i][2] = Integer.parseInt(st2.nextToken());
+			}
+			for (int i = 0; i < s; i++) { // 소금쟁이별로 뛰기 시작.
+				int curx = sol[i][0]; // 현재 x좌표
+				int cury = sol[i][1]; // 현재 y좌표
+				int dir = sol[i][2]; // 점프 방향
+				int cnt = 3;
+				if (map[curx][cury] == 1) { // 시작 위치에 이미 다른 소금쟁이가 있다면 죽는다.
+					isDead[i] = true; // 죽음. 다음 소금쟁이로 ...
+					continue;
+				} else { // 방향대로 3칸, 2칸, 1칸 뛰자.
+
+					for (cnt = 3; cnt > 0; cnt--) { // 세번 점프
+						if (dir == 1) { // 방향이 '상'
+							curx -= cnt;
+						} else if (dir == 2) { // 방향이 '하'
+							curx += cnt;
+						} else if (dir == 3) { // 방향이 '좌'
+							cury -= cnt;
+						} else if (dir == 4) { // 방향이 '우'
+							cury += cnt;
+						}
+						// 현재 위치를 옮김.
+
+						if (curx < 0 || curx >= n || cury < 0 || cury >= n || map[curx][cury] == 1) {
+							// 맵을 빠져나갔거나 이미 소금쟁이가 있다면
+							isDead[i] = true; // 죽음.
+							break; // 그만 점프
+						}
+						// 정상 점프고 마지막 점프였다면
+						if (cnt == 1) {
+							map[curx][cury] = 1;
+						}
+					}
+
 				}
 			}
-	
-			ans[tc]="#"+(tc+1)+" "+live;	
+
+			int live = 0;
+			for (int i = 0; i < s; i++) {
+				if (isDead[i] == false) {// 살아있는 소금쟁이 발견
+					live++;
+				}
+			}
+
+			ans[tc] = "#" + (tc + 1) + " " + live;
 		}
-		for(int i=0; i<ans.length; i++) {
+		for (int i = 0; i < ans.length; i++) {
 			System.out.println(ans[i]);
 		}
-		sc.close();
+		
 	}
 }
