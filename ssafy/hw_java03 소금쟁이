@@ -32,7 +32,7 @@ public class Solution22 {
 				int cury = sol[i][1]; // 현재 y좌표
 				int dir = sol[i][2]; // 점프 방향
 				int cnt = 3;
-				if (map[curx][cury] == 1) { // 시작 위치에 이미 다른 소금쟁이가 있다면 죽는다.
+				if (map[curx][cury] == 1) { // 시작 위치에 이미 다른 소금쟁이가 있다면 죽는다!
 					isDead[i] = true; // 죽음. 다음 소금쟁이로 ...
 					continue;
 				} else { // 방향대로 3칸, 2칸, 1칸 뛰자.
