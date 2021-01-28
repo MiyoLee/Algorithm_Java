@@ -1,0 +1,56 @@
+
+import java.util.Scanner;
+
+class Solution {
+	public static void main(String args[]) throws Exception {
+
+		Scanner sc = new Scanner(System.in);
+		int T;
+		T = sc.nextInt();
+
+		for (int tc = 1; tc <= T; tc++) {
+			int N = sc.nextInt();
+			int[][] snail = new int[N][N];
+			int number = 1;
+			int curi = 0, curj = -1;
+			
+			// 오른쪽
+			// 아래쪽
+			// 왼쪽
+			// 위쪽
+			while (true) {
+				
+				for(int i=0; i<N; i++) {
+					curj++;
+					snail[curi][curj]=number++;
+				}
+				N--;
+				for(int i=0; i<N; i++) {
+					curi++;
+					snail[curi][curj]=number++;
+				}
+				if(N==0) break;
+				
+				for(int i=0; i<N; i++) {
+					curj--;
+					snail[curi][curj]=number++;
+				}
+				N--;
+				for(int i=0; i<N; i++) {
+					curi--;
+					snail[curi][curj]=number++;
+				}
+				if(N==0) break;
+			}
+			System.out.println("#"+tc);
+			for(int i=0; i<snail.length; i++) {
+				for(int j=0; j<snail[i].length; j++) {
+					System.out.print(snail[i][j]+" ");
+				}
+				System.out.println();
+			}
+		}
+		sc.close();
+	}
+
+}
