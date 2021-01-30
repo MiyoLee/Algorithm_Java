@@ -1,0 +1,36 @@
+
+import java.util.Scanner;
+import java.io.FileInputStream;
+
+class Solution {
+	public static void main(String args[]) throws Exception {
+		
+		Scanner sc = new Scanner(System.in);
+
+		int n = sc.nextInt(); // 3,6,9게임 룰에 맞게 1~n 까지 숫자 출력
+		String[] arr = new String[n + 1]; // 인덱스 : 0~n
+
+		for (int i = 1; i <= n; i++) {
+			int cnt = 0;
+			String s = Integer.toString(i);
+			for (int j = 0; j < s.length(); j++) {
+				if (s.charAt(j) == '3' || s.charAt(j) == '6' || s.charAt(j) == '9') {
+					cnt++;
+				}
+			}
+			if (cnt == 0) { // 일반 숫자
+				arr[i] = Integer.toString(i);
+			} else { // 3,6,9 포함
+				arr[i] = "-";
+				for (int k = 0; k < cnt - 1; k++) {
+					arr[i] += '-';
+				}
+			}
+		}
+		for (int i = 1; i <= n; i++) {
+			System.out.print(arr[i] + " ");
+		}
+		sc.close();
+	}
+
+}
