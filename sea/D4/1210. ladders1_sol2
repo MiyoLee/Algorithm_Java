@@ -1,0 +1,54 @@
+package ssafy_algo_0202;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class T06_1210_D4 {
+	final static int N=100;
+	private static int[] dr= {0,0,-1};		//좌우상
+	private static int[] dc= {-1,1,0};
+	public static void main(String[] args) throws IOException {
+		System.setIn(new FileInputStream("T06_1210_D4.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		int[][] ladder;
+		for(int tc = 1; tc<=10; tc++) {
+			br.readLine();		//테케 읽어서 버림
+			
+			ladder = new int[N][N];// 100*100 배열 생성.
+			
+			int cr=99;		//현재 위치 저장.
+			int cc=0;	
+			
+			for(int i=0; i<N; i++) {
+				st = new StringTokenizer(br.readLine()," ");
+				for(int j=0; j<N; j++) {
+					ladder[i][j]=Integer.parseInt(st.nextToken());
+					if(ladder[i][j]==2) {		//도착지 를 현재 위치로 저장.
+						cr=i;
+						cc=j;
+					}
+				}
+			}
+			//////입력 완료.
+			
+			while(cr>0) {		//cr 이 0이면 빠져나옴.
+				
+				if (cc - 1 >= 0 && ladder[cr][cc - 1] == 1) {
+					ladder[cr][cc] = 0;
+					cc--;
+				} else if (cc + 1 < N && ladder[cr][cc + 1] == 1) {
+					ladder[cr][cc] = 0;
+					cc++;
+				} else
+					cr--;
+			}
+			System.out.println("#"+tc+" "+cc);
+		}
+		
+		
+	}
+}
