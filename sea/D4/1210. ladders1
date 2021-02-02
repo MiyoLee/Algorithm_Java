@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+class Solution {
+	private final static int N=100;
+	private static int[][] ladder;
+	private static boolean[][] visited;
+	public static void main(String args[]) throws Exception {
+		
+		//System.setIn(new FileInputStream("T06_1210_D4.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		for(int tc=1; tc<=10; tc++) {
+			ladder = new int[N][N];
+			int answer = 1004;
+			br.readLine();		//테케 번호 읽음. 저장할필욘 X
+
+			for(int i=0; i<N; i++) {		//i개의 줄 저장.
+				st = new StringTokenizer(br.readLine()," ");
+				for(int j=0; j<N; j++) {
+					ladder[i][j]=Integer.parseInt(st.nextToken());
+				}
+			}
+			//입력받음.
+			for(int j=0; j<N; j++) {
+				if(ladder[0][j]==1) {	//시작
+					visited = new boolean[N][N];
+					int r=0,c=j;		//현재 위치 저장
+					while(r < 99) {
+						if(c-1>=0 && ladder[r][c-1]==1 && visited[r][c-1]==false) {	//좌
+							c--;
+						}
+						else if(c+1<N && ladder[r][c+1]==1 && visited[r][c+1]==false) {		//우
+							c++;
+						}
+						else {		//아니면 하
+							r++;
+						}	
+						visited[r][c]=true;
+					}
+					// r=99인 상태.
+					if(ladder[r][c]==2) {
+						answer = j;
+						break;
+					}
+				}
+			}
+			System.out.println("#"+tc+" "+answer);
+		}
+		br.close();
+	}
+}
