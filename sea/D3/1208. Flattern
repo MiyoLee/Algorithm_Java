@@ -1,0 +1,38 @@
+package ssafy_algo_0202;
+
+import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Solution {
+	public static void main(String args[]) throws Exception
+	{
+		//System.setIn(new FileInputStream("T05_1208_D3.txt"));
+		Scanner sc = new Scanner(System.in);
+
+		for(int tc = 1; tc <= 10; tc++)
+		{
+			int n;
+			n=sc.nextInt();					//덤프 횟수 입력.
+			int[]box = new int[100];
+			for(int i=0; i<100; i++) {		//초기 박스 높이들 입력받음
+				box[i]=sc.nextInt();	
+			}
+			
+			Arrays.sort(box);				//먼저, 오름차순으로 정렬
+			int gap = box[99]-box[0];		//마지막 상	자의 높이-현재 상자의 높이 초기값.
+			
+			for(int i=0; i<n; i++) {					//n회 반복
+				if(Math.abs(box[0]-box[99])<=1) {		//평탄화가 끝났다면 for문 탈출
+					break;
+				}	
+				box[99]--;	
+				box[0]++;
+				Arrays.sort(box);			//재정렬 후
+			}
+			gap = box[99]-box[0];			//gap : 마지막 상자의 높이-첫 상자의 높이
+			System.out.println("#"+tc+" "+gap);
+		}
+		sc.close();
+	}
+}
