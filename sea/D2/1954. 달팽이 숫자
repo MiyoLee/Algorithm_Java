@@ -1,56 +1,53 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-import java.util.Scanner;
+public class Solution {
+	private static int[] dr = { 0, 1, 0, -1 }; // 시계방향
+	private static int[] dc = { 1, 0, -1, 0 };
 
-class Solution {
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), "");
 
-		Scanner sc = new Scanner(System.in);
-		int T;
-		T = sc.nextInt();
+		int T = Integer.parseInt(st.nextToken()); // 테케 갯수 입력.
 
 		for (int tc = 1; tc <= T; tc++) {
-			int N = sc.nextInt();
-			int[][] snail = new int[N][N];
-			int number = 1;
-			int curi = 0, curj = -1;
+			st = new StringTokenizer(br.readLine(), "");
+			int N = Integer.parseInt(st.nextToken()); // N 입력받음.
+
+			int[][] map = new int[N][N]; // 다 0임.
+
+			int input = 1;		//처음 값은 넣어줌.
+			map[0][0]=1;
+			input++;
+			int cr = 0, cc = 0;
 			
-			// 오른쪽
-			// 아래쪽
-			// 왼쪽
-			// 위쪽
-			while (true) {
-				
-				for(int i=0; i<N; i++) {
-					curj++;
-					snail[curi][curj]=number++;
+			for (int i = 0; i < 2 * N - 1; i++) { // 다른방향으로 2N-1번 감.
+				while (true) {			//한 방향일때 쭉!
+					int nr = cr + dr[i % 4]; // (0,1)->(1,0)->(0,-1)->(-1,0)
+					int nc = cc + dc[i % 4];
+					if (nr >= 0 && nc >= 0 && nr < N && nc < N && map[nr][nc]==0) { // 범위에 맞으면
+						map[nr][nc] = input;
+						input++;
+						cr=nr;						//현재 위치도 옯겨줌.
+						cc=nc;
+					}
+					else break;
 				}
-				N--;
-				for(int i=0; i<N; i++) {
-					curi++;
-					snail[curi][curj]=number++;
-				}
-				if(N==0) break;
-				
-				for(int i=0; i<N; i++) {
-					curj--;
-					snail[curi][curj]=number++;
-				}
-				N--;
-				for(int i=0; i<N; i++) {
-					curi--;
-					snail[curi][curj]=number++;
-				}
-				if(N==0) break;
 			}
 			System.out.println("#"+tc);
-			for(int i=0; i<snail.length; i++) {
-				for(int j=0; j<snail[i].length; j++) {
-					System.out.print(snail[i][j]+" ");
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i<map.length; i++) {
+				for(int j=0; j<map[i].length; j++) {
+					sb.append(map[i][j]).append(" ");
 				}
-				System.out.println();
+				sb.append('\n');
 			}
+			sb.setLength(sb.length()-1);;
+			
+			System.out.println(sb);
 		}
-		sc.close();
 	}
-
 }
