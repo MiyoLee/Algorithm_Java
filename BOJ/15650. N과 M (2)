@@ -1,0 +1,33 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	private static int N, M;
+
+	private static void Com(int cnt, int[] selected, int startIdx) {
+		if (cnt == M) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < M; i++) {
+				sb.append(selected[i]).append(' ');
+			}
+			System.out.println(sb);
+			return;
+		}
+		for (int i = startIdx; i <= N; i++) {
+			selected[cnt] = i;
+			Com(cnt + 1, selected, i + 1);
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		// 1~N 중에 중복없이 M개를 고른 수열. 즉 Permutation.
+		Com(0, new int[M], 1);
+	}
+}
