@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+//블랙잭. 재귀 조합.
 public class Main {
 	private static int N,M;
 	private static int[] card;
-	private static List<Integer>sum = new ArrayList<>();
-
+	private static int max=0;
 	private static void Combi(int cnt, int startIdx, int[] selected) {
 		if(cnt==3) {
-			if(selected[0]+selected[1]+selected[2]<=M) {
-				sum.add(selected[0]+selected[1]+selected[2]);
+
+			int tmpsum=selected[0]+selected[1]+selected[2];
+			if(tmpsum>max && tmpsum <= M) {
+				max = tmpsum;
 			}
 			return;
 		}
@@ -37,17 +39,7 @@ public class Main {
 		//입력 확인.
 		Combi(0,0,new int[3]);
 		
-		// 합 중에 최댓값.
-		int max=0;
-		for(int i=0; i<sum.size(); i++) {
-			if(sum.get(i)==M) {
-				max=sum.get(i);
-				break;
-			}
-			else if(sum.get(i)>max && sum.get(i)<M) {
-				max=sum.get(i);
-			}
-		}
+
 		System.out.println(max);
 	}
 }
