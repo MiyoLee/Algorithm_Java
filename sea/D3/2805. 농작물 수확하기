@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Solution {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		int T = Integer.parseInt(st.nextToken());
+
+		for (int tc = 1; tc <= T; tc++) {
+
+			st = new StringTokenizer(br.readLine());
+			int N = Integer.parseInt(st.nextToken()); // 농장의 크기. N은 항상 홀수다.
+			int sum = 0;
+
+			int[][] farm = new int[N][N];
+			for (int i = 0; i < N; i++) {
+				String tmp = br.readLine();
+				for (int j = 0; j < N; j++) {
+					farm[i][j] = tmp.charAt(j) - '0';
+				}
+			}
+			// 입력 확인.
+			// 상단 삼각형
+			for (int i = 0; i < N / 2; i++) {
+				for (int j = N / 2 - i; j <= (N / 2 + i); j++) {
+					sum += farm[i][j];
+				}
+			}
+			// 하단 삼각형
+
+			for (int i = N / 2; i >= 0; i--) {
+				for (int j = N / 2 - i; j <= (N / 2 + i); j++) {
+					sum += farm[N-1-i][j];
+				}
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ").append(sum);
+			System.out.println(sb);
+		}
+	}
+}
