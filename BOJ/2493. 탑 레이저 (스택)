@@ -1,0 +1,45 @@
+package com.ssafy.hwalgo04;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class BOJ_2493 {
+	static int N;
+	static int[] tower;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		N = Integer.parseInt(br.readLine()); // 탑의 갯수 입력.
+
+		Stack<int[]> s = new Stack<>();
+		st = new StringTokenizer(br.readLine(), " ");
+		s.push(new int[] { 1, Integer.parseInt(st.nextToken()) }); // 첫번째 tower 그냥 넣음
+		sb.append(0).append(' '); // 첫번째 tower 수신 X
+
+		for (int i = 2; i <= N; i++) { // 두번째 탑부터..
+			int tmp = Integer.parseInt(st.nextToken());
+			while (true) {
+				if(s.isEmpty() || s.peek()[1]>tmp)break;
+				if (s.peek()[1] < tmp) {
+					s.pop();
+				}
+			}
+			if (s.isEmpty()) {
+				sb.append(0).append(' ');
+			} else {
+				sb.append(s.peek()[0]).append(' ');
+			}
+			s.push(new int[] { i, tmp }); // 스택에 넣는다.
+		}
+		// 입력.
+
+		sb.setLength(sb.length() - 1);
+
+		System.out.println(sb);
+	}
+}
