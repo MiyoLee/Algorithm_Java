@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
+public class Main {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		int[] arr = new int[N];
+		for (int i = N - 1; i >= 0; i--) { // 순서 거꾸로 배열 삽입.
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+
+		Stack<Integer> s = new Stack<>();
+		Stack<Integer> rs = new Stack<>();
+		s.push(arr[0]); // 일단 첫번째 숫자는 스택에 넣음
+		rs.push(-1);
+
+		for (int i = 1; i < N; i++) {
+			while (true) {
+				if (!s.isEmpty() && s.peek() <= arr[i]) {
+					s.pop();
+				}
+				else break;
+			}
+			if(s.isEmpty()) {
+				rs.push(-1);
+			}
+			else {
+				rs.push(s.peek());
+			}
+			s.push(arr[i]);
+		}
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<N; i++) {
+			sb.append(rs.pop()).append(' ');
+		}
+		System.out.println(sb);
+	}
+}
