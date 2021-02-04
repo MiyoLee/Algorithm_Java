@@ -1,0 +1,69 @@
+package ssafy_algo_0204;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+public class SWEA_1218 {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int tc = 1; tc <= 10; tc++) {
+			
+			Stack<Character> stack = new Stack<>();
+			int result = 1;
+			int N = Integer.parseInt(br.readLine()); // 문자열의 길이.\
+			String tmp = br.readLine();
+			
+			int i=0;
+			for (i = 0; i < N; i++) {
+				char c = tmp.charAt(i);
+				if (c == '(' || c == '[' || c == '{' || c == '<') {
+					stack.push(c);
+				} else if (c == ')') {
+					if (!stack.isEmpty()&&stack.peek()=='(') {
+						stack.pop();
+						continue;
+					}
+					else {
+						result = 0;
+						break;
+					}
+				} else if (c == ']') {
+					if (!stack.isEmpty()&&stack.peek()=='[') {
+						stack.pop();
+						continue;
+					}
+					else {
+						result = 0;
+						break;
+					}
+				} else if (c == '}') {
+					if (!stack.isEmpty()&&stack.peek()=='{') {
+						stack.pop();
+						continue;
+					}
+					else {
+						result = 0;
+						break;
+					}
+				} else if (c == '>') {
+					if (!stack.isEmpty()&&stack.peek()=='<') {
+						stack.pop();
+						continue;
+					}
+					else {
+						result = 0;
+						break;
+					}
+				}
+			}
+			if(i==N && !stack.isEmpty()) {
+				result=0;
+			}
+			System.out.println("#" + tc + ' ' + result);
+			
+		}
+	}
+}
