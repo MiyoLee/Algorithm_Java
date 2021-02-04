@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+public class Main {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		while(true) {		
+			String str = br.readLine();
+			if(str.length()==1 && str.charAt(0)=='.') {		//프로그램 종료.
+				break;
+			}
+			//tmp가 균형잡힌 문자열인지 판별!!
+			Stack<Character>stack = new Stack<>();
+			int flag=1;
+			char c=0;
+			for(int i=0; i<str.length(); i++) {
+				if((c=str.charAt(i))=='(' || c=='[') {
+					stack.push(c);
+				}
+				else if((c=str.charAt(i))==')') {
+					if(!stack.isEmpty() && stack.peek()=='(') {
+						stack.pop();
+					}
+					else {
+						flag=0;		//균형X
+						break;
+					}
+				}
+				else if((c=str.charAt(i))==']') {
+					if(!stack.isEmpty() && stack.peek()=='[') {
+						stack.pop();
+					}
+					else {
+						flag=0;		//균형X
+						break;
+					}
+				}
+			}
+			
+			if(flag==1 && !stack.isEmpty()) {
+				flag=0;
+			}
+			
+			if(flag==1)System.out.println("yes");
+			else if(flag==0)System.out.println("no");
+		}
+	}
+}
