@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+public class Main {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
+		Stack<Character>stack;
+		
+		for(int tc=1; tc<=T; tc++) {
+			stack = new Stack<>();
+			int flag=1;
+			String tmp = br.readLine();
+			char c=0;
+			for(int i=0; i<tmp.length(); i++) {
+				if((c=tmp.charAt(i)) == '(') {
+					stack.push(c);
+				}
+				else if((c=tmp.charAt(i)) == ')') {
+					if(!stack.isEmpty() && stack.peek() == '(') {
+						stack.pop();
+					}
+					else {
+						flag = 0;
+						break;
+					}
+				}
+			}
+			if(flag==1 && !stack.isEmpty()) {
+				flag=0;
+			}
+			
+			if(flag==1) {System.out.println("YES");}
+			else if(flag==0) {System.out.println("NO");}
+		}
+	}
+}
