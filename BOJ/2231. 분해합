@@ -11,8 +11,6 @@ public class BOJ_2231 {
 		int digits = nstr.length(); // 자릿수
 		int N = Integer.parseInt(nstr);
 
-		int tmp = 0;
-
 		int M=0;
 		for (int m = N - digits*9; m < N; m++) {
 			String tmpstr = Integer.toString(m);
