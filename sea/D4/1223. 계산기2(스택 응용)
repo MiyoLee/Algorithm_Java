@@ -52,9 +52,9 @@ public class SWEA_1223_D4 {
 			Stack<Integer> so = new Stack<>();
 			for (int i = 0; i < postfix.size(); i++) {
 				char c = postfix.get(i);
-				if (c >= '0' && c <= '9') {
+				if (c >= '0' && c <= '9') {		//숫자면 스택에 push
 					so.push(c - '0');
-				} else {
+				} else {						//연산자면 스택에 두 값을 연산한다음 그 값을 스택에 push.
 					int op1 = so.pop();
 					int op2 = so.pop();
 					if (c == '+') {
