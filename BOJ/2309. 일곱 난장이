@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 public class BOJ_2309 {
 	private static int[] dwarfs;
-	private static StringBuilder sb = new StringBuilder();
 	private static int[] result = new int[7];
 	private static int flag=0;
 	private static void Combination(int cnt, int[] selected, int startIdx) {
