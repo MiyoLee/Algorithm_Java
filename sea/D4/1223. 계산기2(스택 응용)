@@ -1,0 +1,70 @@
+package ssafy_algo_0205;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class SWEA_1223_D4 {
+	private static int priority(char op) {
+		switch(op) {
+		case '*':return 1; 
+		case '+':return 2; 
+		default: return 3;
+		}
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int tc = 1; tc <= 10; tc++) {
+			Stack<Character> si = new Stack<>();
+			int N = Integer.parseInt(br.readLine());
+			String str = br.readLine();
+			List<Character> postfix = new ArrayList<>();
+
+			for (int i = 0; i < str.length(); i++) {
+				char c = str.charAt(i);
+				if (c >= '0' && c <= '9') { // 숫자일 경우
+					postfix.add(c);
+				} 
+				else {						//연산자일 경우
+					if(si.isEmpty()) {		//스택 비었으면 push하고
+						si.push(c);
+					}
+					else {					//안비었으면 peek값과 c의 우선순위를 비교해서 결정. 
+						//만약 peek값보다 c의 우선순위가 높다면 push.
+						if(priority(c)<priority(si.peek())) {
+							si.push(c);
+						}
+						//아니라면 pop해서 postfix 리스트에 add한 후 c를 스택에 push.
+						else {
+							postfix.add(si.pop());
+							si.push(c);
+						}
+					}
+				}
+			}
+			while (!si.isEmpty()) {
+				postfix.add(si.pop());
+			}
+			// 후위표기법으로 변환 완료.
+			Stack<Integer> so = new Stack<>();
+			for (int i = 0; i < postfix.size(); i++) {
+				char c = postfix.get(i);
+				if (c >= '0' && c <= '9') {
+					so.push(c - '0');
+				} else {
+					int op1 = so.pop();
+					int op2 = so.pop();
+					if (c == '+') {
+						so.push(op1 + op2);
+					} else if (c == '*') {
+						so.push(op1 * op2);
+					}
+				}
+			}
+			System.out.println("#" + tc + " " + so.peek());
+		}
+	}
+}
