@@ -1,0 +1,70 @@
+package ssafy_algo_0209;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_1260 {
+	static int N,M,V;
+	static int[][] graph;
+	static int[] visited;
+	
+	public static void init() {
+		for(int i=0; i<visited.length; i++) {
+			visited[i]=0;
+		}
+	}
+	
+	public static void DFS(int v) {
+		visited[v]=1;
+		System.out.print(v+" ");
+		for(int i=1; i<=N; i++) {
+			if(graph[v][i]==1 && visited[i]==0){
+				DFS(i);
+			}
+		}
+	}
+	public static void BFS(int v) {
+		Queue<Integer>queue = new LinkedList<>();
+		queue.offer(v);
+		int curr;
+		visited[v]=1;
+		while(!queue.isEmpty()) {
+			curr = queue.poll();
+			System.out.print(curr+" ");		//방문
+			for(int i=1; i<=N; i++) {
+				if(graph[curr][i]==1 && visited[i]==0){		//여기서 visited는 큐에 들어갔는지 안들어갔는지.
+					queue.offer(i);
+					visited[i]=1;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine()," ");
+        N = Integer.parseInt(st.nextToken());		//정점의 개수
+        M = Integer.parseInt(st.nextToken());		//간선의 개수
+        V = Integer.parseInt(st.nextToken());		//탐색을 시작할 정점의 번호
+        
+        graph = new int[N+1][N+1];		//정점: 1~N
+        visited = new int[N+1];
+        for(int i=0; i<M; i++) {		//간선 입력받는다.
+        	st = new StringTokenizer(br.readLine()," ");
+        	int n1 = Integer.parseInt(st.nextToken());
+        	int n2 = Integer.parseInt(st.nextToken());
+        	graph[n1][n2]=graph[n2][n1]=1;
+        }
+        //입력 완료.
+        
+        //DFS.
+        DFS(V);
+        init();
+        System.out.println();
+        BFS(V);
+        //System.out.println(Arrays.toString(visited));
+	}
+}
