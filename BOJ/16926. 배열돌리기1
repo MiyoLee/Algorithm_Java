@@ -1,0 +1,100 @@
+package ssafy_algo_2010;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_16926 {
+	static int N, M, R, num;
+	static int[][] map;
+	static int[] dr = { 0, 1, 0, -1 }; // 우 하 좌 상
+	static int[] dc = { 1, 0, -1, 0 }; // 우 하 좌 상
+	
+	//재귀
+	//한칸씩 반시계방향으로 옮기는 함수
+	private static void rotation(int n, int cr, int cc, int d) {
+		if (d >= 4) {		//한바퀴 돌면 끝.
+			return;
+		}
+		int nr = cr + dr[d];
+		int nc = cc + dc[d];
+		if (nr >= n && nc >= n && nr < N - n && nc < M - n) {
+			map[cr][cc] = map[nr][nc];
+			rotation(n, nr, nc, d); 		// 다음
+		} 
+		else { 							// 범위 벗어난다면 방향 꺾기.
+			rotation(n, cr, cc, d + 1);
+		}
+
+	}
+	
+	//while문
+//	private static void rotation() {
+//		for (int n = 0; n < num; n++) { // 돌릴 그룹의 수
+//
+//			// 그룹의 맨 왼쪽 맨 위 값.
+//			int temp = map[n][n];		//맨 첫번째 값은 저장해두기.
+//			int d = 0; // 몇번 꺾였는지 체크.
+//			int cr = n, cc = n; 		// 재귀가 아닌 while로 짜서...
+//
+//			while (d < 4) {
+//
+//				int nr = cr + dr[d];
+//				int nc = cc + dc[d];
+//
+//				if (nr >= n && nc >= n && nr < N - n && nc < M - n) {
+//					map[cr][cc] = map[nr][nc]; // 이전 점의 값을 다음점의 값으로 치환
+//					cr = nr; // 현재 점을 다음점의 값으로 바꾸고 while문 다시 ㄱㄱ
+//					cc = nc;
+//				} else {
+//					d++; // 다음 점이 범위를 벗어남 == 꺾어야되는 타이밍
+//				}
+//				print();
+//				System.out.println("==================");
+//			}
+//			map[n + 1][n] = temp;
+//			print();
+//			System.out.println("==================");
+//		}
+//	}
+
+	public static void print() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				sb.append(map[i][j]).append(" ");
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb);
+	}
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken()); // 2 ≤ N, M ≤ 300
+		M = Integer.parseInt(st.nextToken());
+		R = Integer.parseInt(st.nextToken()); // 1 ≤ R ≤ 1,000
+
+		map = new int[N][M];
+		for (int i = 0; i < map.length; i++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			for (int j = 0; j < map[i].length; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		// 입력 완료.
+		
+		num = Math.min(N, M) / 2; // 돌릴 그룹의 수.
+
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < num; j++) {
+				int tmp = map[j][j];
+				rotation(j, j, j, 0);
+				map[j+1][j]=tmp;
+			}
+		}
+		print();
+	}
+}
