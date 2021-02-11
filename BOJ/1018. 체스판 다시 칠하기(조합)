@@ -1,0 +1,78 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_1018 {
+	private static int N, M;
+	private static char[][]board;
+	private static char[][]chess = new char[8][8];
+	
+	public static void print(char[][] arr) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr[i].length; j++) {
+				sb.append(arr[i][j]).append(" ");
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb);
+	}
+	
+	//체스판을 잘라서 새로 칠해야하는 최소 칸수를 반환하는 함수.
+	public static int Cut(int r, int c) {		//체스판의 시작지점.
+		//보드를 8*8로 자른다.
+		for(int i=0; i<chess.length; i++) {
+			for(int j=0; j<chess[i].length; j++) {
+				chess[i][j]=board[i+r][j+c];
+			}
+		}
+		int cnt1 = 0;
+		for(int i=0; i<chess.length; i++) {
+			for(int j=0; j<chess[i].length; j++) {
+				if((i+j)%2==0 && chess[i][j]=='B') {	//W자리인데 B가 있으면 cnt++
+					++cnt1;
+				}
+				if((i+j)%2==1 && chess[i][j]=='W') {	//B자리인데 W가 있으면 cnt++
+					++cnt1;
+				}
+			}
+		}
+		int cnt2 = 0;
+		for(int i=0; i<chess.length; i++) {
+			for(int j=0; j<chess[i].length; j++) {
+				if((i+j)%2==0 && chess[i][j]=='W') {	//B자리인데 W가 있으면 cnt++
+					++cnt2;
+				}
+				if((i+j)%2==1 && chess[i][j]=='B') {	//W자리인데 B가 있으면 cnt++
+					++cnt2;
+				}
+			}
+		}
+		return Math.min(cnt1, cnt2);
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		board = new char[N][M];
+		
+		for(int i=0; i<N; i++) {
+			String tmp = br.readLine();
+			for(int j=0; j<M; j++) {
+				board[i][j]=tmp.charAt(j);
+			}
+		}
+		// 입력 완료.
+		int answer = 64;
+		for(int i=0; i<=N-8; i++) {
+			for(int j=0; j<=M-8; j++) {
+				answer = Math.min(answer, Cut(i,j));
+			}
+		}
+		System.out.println(answer);
+	}
+}
