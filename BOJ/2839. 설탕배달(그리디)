@@ -1,4 +1,4 @@
-package boj;
+package ssafy_algo_0216;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,30 +6,28 @@ import java.io.InputStreamReader;
 
 public class BOJ_2839 {
 	static int N;
+
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
+
+		int answer = -1;
 		
-		int result=-1;
-		if(N<5) {
-			if(N%3==0) {
-				result=N/3;
-			}
-		}
-		else if(N%5==0) {
-			result=N/5;
-		}
-		else {		
-			for(int i=N/5; i>=1; i--) {		//5가 제일 많은것부터 ~~
-				if((N-i*5)%3==0) {
-					result = i+(N-i*5)/3;
-					break;
+		if (N < 5 && N % 3 == 0) {	// N이 5보다 작고 3의 배수면
+			answer = N / 3;
+		} 
+		else { 				// N이 5 이상
+			if (N % 5 == 0)		// N이 5의 배수
+				answer = (N / 5);
+			else {			// N이 5 이상이면서 5의 배수는 아님.
+				for(int i = N/5; i>=0; i--) {
+					if((N-5*i)%3 == 0) {		// 5갯수를 최대로해서 하나씩 줄이면서, 처음으로 3의배수인 나머지를 만나면 break
+						answer = i+(N-5*i)/3;
+						break;
+					}
 				}
 			}
-			if(result==-1 && N%3==0) {
-				result = N/3;
-			}
 		}
-		System.out.println(result);
+		System.out.println(answer);
 	}
 }
