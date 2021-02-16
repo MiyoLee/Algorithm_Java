@@ -1,0 +1,76 @@
+package ssafy_algo_0215;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class SWEA_6808_D3 {
+	static int []card1;
+	static int []card2;
+	static boolean [] isSelected;
+	static int win;
+	static int lose;
+	static StringBuilder sb = new StringBuilder();
+	public static void Per(int cnt, int[] selected, boolean[] visited) {
+		if(cnt==9) {
+			//규영이가 게임을 이기는 경우의 수, 규영이가 게임을 지는 경우의수
+			int p1=0;
+			int p2=0;
+			for(int i=0; i<selected.length; i++) {
+				if(card1[i]-selected[i] > 0) {
+					p1+=card1[i]+selected[i];
+				}
+				else {
+					p2+=card1[i]+selected[i];
+				}
+			}
+			if(p1>p2) {		//이김
+				++win;
+			}
+			else if(p1<p2) {	//짐
+				++lose;
+			}
+			return;
+		}
+		for(int i=0; i<card2.length; i++) {
+			if(!visited[i]) {
+				selected[cnt]=card2[i];
+				visited[i]=true;
+				Per(cnt+1, selected, visited);
+				visited[i]=false;
+			}
+		}
+	}
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		int T = Integer.parseInt(br.readLine());
+		for(int tc=1; tc<=T; tc++) {
+			card1 = new int[9];
+			card2 = new int[9];
+			isSelected = new boolean[19];	//1~18
+			win=0;
+			lose=0;
+			st = new StringTokenizer(br.readLine()," ");
+			for(int i=0; i<9; i++) {
+				card1[i]=Integer.parseInt(st.nextToken());
+				isSelected[card1[i]]=true;
+			}
+			//입력 완료.
+			
+			//인영이의 카드묶음
+			int cnt=0;
+			for(int i=1; i<isSelected.length; i++) {
+				if(isSelected[i]==false) {
+					card2[cnt]=i;
+					++cnt;
+				}
+			}
+			Per(0,new int[9], new boolean[19]);
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ").append(win).append(" ").append(lose);
+			System.out.println(sb);
+		}
+	}
+}
