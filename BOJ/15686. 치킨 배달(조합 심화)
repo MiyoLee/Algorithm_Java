@@ -1,0 +1,91 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class BOJ_15686 {
+	static int N, M;
+	static int[][] map;		//NxN
+	static int[][] copyMap;	//원래 맵 저장.
+	static int ans = Integer.MAX_VALUE;		//정답
+	static List<Pos> home = new ArrayList<>();
+	static List<Pos> chicken = new ArrayList<>();	// 치킨집 배열
+	static List<Pos> selected = new ArrayList<>();	// 선택된 치킨집 배열
+	
+	static class Pos{
+		int y,x;
+		public Pos(int y, int x) {
+			super();
+			this.y = y;
+			this.x = x;
+		}
+		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());		//map 크기
+		M = Integer.parseInt(st.nextToken());		//고를 치킨집 수
+		map = new int[N+1][N+1];	//r과  c는 1부터 시작.
+		copyMap = new int[N+1][N+1];
+		for(int i=1; i<=N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j=1; j<=N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				copyMap[i][j] = map[i][j];
+				if(map[i][j]==1) home.add(new Pos(i,j));
+				if(map[i][j]==2) chicken.add(new Pos(i,j));
+			}
+		}
+		//입력 완료.
+		Comb(0,0);
+		System.out.println(ans);
+	}
+	public static void Comb(int cnt, int startIdx) {
+		if(cnt==chicken.size()-M) {	//폐업할 치킨집 전체-M개 선택 완료.
+			// 선택된 치킨집 좌표 0으로 바꾸기
+			for(int i=0; i<selected.size(); i++) {
+				map[selected.get(i).y][selected.get(i).x]=0;
+			}
+			int sumOfcd = sumOfdistance();		//호출
+			if(sumOfcd < ans) ans = sumOfcd;
+			init();	//맵 초기화
+			return;
+		}
+		for(int i=startIdx; i<chicken.size(); i++) {
+			selected.add(chicken.get(i));
+			Comb(cnt+1, i+1);
+			selected.remove(selected.size()-1);			//배열이 아니라 arraylist 이므로 지워줘야함
+		}
+	}
+	public static int sumOfdistance() {
+		int total = 0;
+		for(int i=0; i<home.size(); i++) {
+			Pos h = home.get(i);
+			int dist = Integer.MAX_VALUE;
+			// 맵 순회
+			for(int j=1; j<=N; j++) {
+				for(int k=1; k<=N; k++) {
+					if(map[j][k]==2 && dist > Math.abs(h.y-j) + Math.abs(h.x-k)) {
+						dist = Math.abs(h.y-j) + Math.abs(h.x-k);
+					}
+				}
+			}
+			total+=dist;
+		}
+		return total;
+	}
+	
+	public static void init() {
+		for(int i=1; i<=N; i++) {
+			for(int j=1; j<=N; j++) {
+				map[i][j] = copyMap[i][j];
+			}
+		}
+	}
+}
