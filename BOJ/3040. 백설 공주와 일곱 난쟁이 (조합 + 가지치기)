@@ -1,0 +1,42 @@
+package com.ssafy.hwalgo09;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+//백설공주. 가지치기로 수정해보자.
+public class BOJ_3040 {
+	static int[] input;
+	static int[] answer;
+	public static void Combi(int cnt, int[] selected, int startIdx, int hsum) {
+		if(hsum>100)return;		// 유망하지 않으면 바로 리턴. 가지치기.
+		
+		if(cnt==7) {			// 기저조건
+			if(hsum==100) {
+				answer=Arrays.copyOf(selected, selected.length);
+			}
+			return;
+		}
+		for(int i=startIdx; i<input.length; i++) {
+			selected[cnt]=input[i];
+			Combi(cnt+1, selected, i+1, hsum+input[i]);
+		}
+	}
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		input = new int[9];
+		for(int i=0; i<input.length; i++) {
+			input[i] = Integer.parseInt(br.readLine());
+		}
+		
+		Combi(0, new int[7], 0, 0);
+		StringBuilder sb = new StringBuilder();
+		for(int i =0; i<answer.length; i++) {
+			sb.append(answer[i]).append("\n");
+		}
+		sb.setLength(sb.length()-1);
+		System.out.println(sb);
+	}
+}
