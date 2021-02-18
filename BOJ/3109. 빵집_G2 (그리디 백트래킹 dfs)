@@ -1,0 +1,61 @@
+package ssafy_algo_0218;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+//빵집.
+//그리디 + dfs
+
+public class BOJ_3109_G2 {
+	static int N, M; // 행, 열
+	static char[][] map;
+	static boolean[][] visited;
+	static int[] dr = {-1,0,1};		//우상 우 우하  ***순서 중요
+	static int cnt;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		map = new char[N][M];
+		visited = new boolean[N][M];
+
+		for (int i = 0; i < N; i++) {
+			String tmp = br.readLine();
+			for (int j = 0; j < M; j++) {
+				map[i][j] = tmp.charAt(j);
+			}
+		}
+		// 입력 완료.
+		
+		cnt=0;
+		for(int i=0; i<N; i++) {		//위쪽부터 놓는다.
+			installPipe(i,0);
+		}
+		System.out.println(cnt);
+	}
+
+	// 가능한 파이프 모두 설치하는 함수.
+	public static boolean installPipe(int r, int c ) { 	//현재 탐색위치
+		if(c==M-2) {	//다 만들었으면 cnt++, 처음으로 돌아가야함
+			cnt++;
+			return true;
+		}
+		int nr,nc;
+		for(int d=0; d<3; d++) {	//우상 ->우-> 우하 순서로 탐색해야한다.
+			nr = r+dr[d];		//방향이동
+			nc = c+1;
+			if(nr>=0 && nr<N && map[nr][nc]!='x' && !visited[nr][nc]) {		// 경계체크, 건물X, 방문 안한점이면 
+				visited[nr][nc]=true;
+				if(installPipe(nr,nc)) return true;
+				//visited[nr][nc]=false;  //방문 되돌리기 안함. 이미 시도됐던 자리는 안감.이미 실패한 자리이기때문이다.
+			}
+		}
+		return false;
+	}
+
+}
