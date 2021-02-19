@@ -1,0 +1,70 @@
+package ssafy_algo_0219;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+//준환이의 양팔저울
+public class SWEA_3234_D4 {
+	static int N;
+	static int[] chu;
+	static int ans;
+	static int total;
+	static int[] factorial= {0,1,2,6,24,120,720,5040,40320,362880};
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int T = Integer.parseInt(st.nextToken());
+		
+		for(int tc=1; tc<=T; tc++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());		// 1~9
+			
+			chu = new int[N];							
+			ans = 0;
+			
+			total = 0;		//총 무게
+			st = new StringTokenizer(br.readLine());
+			for(int i=0; i<N; i++) {
+				chu[i] = Integer.parseInt(st.nextToken());
+				total+=chu[i];
+			}
+			//입력 다 받음.
+			
+			Per(0, new boolean[N], 0, 0);
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ").append(ans);
+			System.out.println(sb);
+		}
+	}
+	
+	public static void Per(int cnt,  boolean[] visited, int left, int right) {
+		
+		if(left < right)return;
+		if(cnt==N) {
+			ans++;
+			return;
+		}
+		if(left >= total-left) {					//남은 무게보다 현재 왼쪽 무게가 더 크다
+			ans+=factorial[N-cnt]*(1<<(N-cnt));		//아직 안담은 추를 담는 경우의 수를 더해주고 리턴
+			return;
+		}
+		for (int j = 0; j < N; j++) { // 추의 순서 결정
+			if (!visited[j]) {
+				visited[j] = true;
+				Per(cnt + 1, visited, left + chu[j], right);	//왼쪽 넣었다
+				Per(cnt + 1, visited, left, right + chu[j]);	//오른쪽 넣었다
+				visited[j] = false;
+			}
+		}
+	}
+	
+//	public static int factorial(int n) {
+//		if(n==1)return 1;
+//		return n*factorial(n-1);
+//	}
+}
