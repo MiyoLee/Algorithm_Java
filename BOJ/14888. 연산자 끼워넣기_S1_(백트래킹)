@@ -1,0 +1,68 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_14888_S1 {
+	static int N;
+	static int[] input;
+	static int[] op = new int[4];		//+ - * / 의 갯수.
+	static long Max = Long.MIN_VALUE;
+	static long Min = Long.MAX_VALUE;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		N = Integer.parseInt(br.readLine());
+		input = new int[N];
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {						//숫자 입력.
+			input[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<4; i++) {						//4개 숫자 입력.
+			op[i] = Integer.parseInt(st.nextToken());
+		}
+		// 입력 완료.
+		
+		Per(0, new int[N-1]);
+		
+		//결과 출력
+		StringBuilder sb = new StringBuilder();
+		sb.append(Max).append("\n").append(Min);
+		System.out.println(sb);
+	}
+	public static void Per(int cnt, int[] selected) {
+		if(cnt==N-1) {		//다 선택했다
+			long result = calc(selected);
+			Max = Math.max(Max, result);
+			Min = Math.min(Min, result);
+			return;
+		}
+		for(int i=0; i<4; i++) {		//0:+ 1:- 2:* 3:/
+			if(op[i]>0) {				//아직 사용할 해당 연산자가 남아있다면
+				selected[cnt]=i;		//선택함.
+				op[i]--;				//갯수 줄임.
+				Per(cnt+1, selected);	//다음 호출.
+				op[i]++;				//사용 취소
+			}
+		}
+	}
+	private static long calc(int[] selected) {
+		int sum=input[0];
+		for(int i=0; i<selected.length; i++) {
+			switch(selected[i]) {
+			case 0: sum += input[i+1]; break;
+			case 1: sum -= input[i+1]; break;
+			case 2: sum *= input[i+1]; break;
+			case 3: sum /= input[i+1]; break;
+			default:;
+			}
+		}
+		return sum;
+	}
+}
