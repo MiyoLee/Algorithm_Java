@@ -1,0 +1,78 @@
+package com.ssafy.hwalgo14;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+//재미있는 오셀로 게임
+public class SWEA_4615_D3 {
+	static int N, M;
+	static int[][] board;
+	static int[] dy = { -1, -1, 0, 1, 1, 1, 0, -1 }; // 위쪽부터 시계방향
+	static int[] dx = { 0, 1, 1, 1, 0, -1, -1, -1 };
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		int T = Integer.parseInt(br.readLine());
+		for (int tc = 1; tc <= T; tc++) {
+			st = new StringTokenizer(br.readLine());
+
+			N = Integer.parseInt(st.nextToken()); // 보드의 한 변의 길이
+			M = Integer.parseInt(st.nextToken()); // 플레이어가 돌을 놓는 횟수
+
+			board = new int[N + 1][N + 1]; // 1~N
+			int mid = N / 2;
+			board[mid][mid] = 2; // 보드 초기화
+			board[mid][mid + 1] = 1;
+			board[mid + 1][mid] = 1;
+			board[mid + 1][mid + 1] = 2;
+			// 보드 초기화 완료.
+
+			for (int i = 0; i < M; i++) {
+				st = new StringTokenizer(br.readLine());
+				int x = Integer.parseInt(st.nextToken()); // colomn
+				int y = Integer.parseInt(st.nextToken()); // row
+				int stone = Integer.parseInt(st.nextToken()); // 1:흑볼 2:백돌
+				// 한 턴 입력 받음
+				board[y][x] = stone; // 돌을 놓는다.
+				
+				for (int d = 0; d < 8; d++) {
+					int ny = y+dy[d];
+					int nx = x+dx[d];
+					int cnt=0;
+					while(ny>=1 && ny<=N && nx>=1 && nx<=N && board[ny][nx]!=stone && board[ny][nx]!=0) {
+						//범위 안에 있고 나와 다른 돌이 연속으로 나타나면  ++
+						ny+=dy[d];
+						nx+=dx[d];
+						cnt++;		//연속된 돌의 갯수
+					}
+					if(ny>=1 && ny<=N && nx>=1 && nx<=N && board[ny][nx]==stone) {
+						//연속된 다른돌 이후 나와 같은 돌이 나왔다면
+						for(int k=1; k<=cnt; k++) {					//지금까지 사이의 돌 다 뒤집기
+							board[y+k*dy[d]][x+k*dx[d]]=stone;
+						}
+					}
+				}
+			}
+			//검은돌 흰돌 count
+			int black=0;
+			int white=0;
+			for(int i=1; i<=N; i++) {
+				for(int j=1; j<=N; j++) {
+					if(board[i][j]==1)black++;
+					else if(board[i][j]==2)white++;
+				}
+			}
+			
+			//정답 출력
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ").append(black).append(" ").append(white);
+			System.out.println(sb);
+		}
+
+	}
+	
+}
