@@ -1,0 +1,69 @@
+package ssafy_algo_0225;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class SWEA_2105 {
+	static int N;
+	static int[][] map;
+	static int[] dr = { 1, 1, -1, -1 };
+	static int[] dc = { 1, -1, -1, 1 };
+	static int maxCnt;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		int T = Integer.parseInt(br.readLine());
+
+		for (int tc = 1; tc <= T; tc++) {
+			N = Integer.parseInt(br.readLine());
+
+			map = new int[N][N];
+
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				for (int j = 0; j < N; j++) {
+					map[i][j] = Integer.parseInt(st.nextToken());
+				}
+			}
+			// 입력 완료
+
+			maxCnt = -1;
+			for (int i = 0; i < N - 2; i++) {
+				for (int j = 1; j < N - 1; j++) {
+					// 시작점이 될 수 있는 범위.
+					dfs(1, i, j, i, j, new boolean[101], 0);
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ").append(maxCnt);
+			System.out.println(sb);
+		}
+
+	}
+
+	public static void dfs(int cnt, int sr, int sc, int r, int c, boolean[] visited, int d) {
+		visited[map[r][c]] = true; // 현재 점 방문.
+		//System.out.println(r+" "+c+" cnt:"+cnt);
+		if (r == sr + 1 && c == sc - 1) { // 시작지점의 직전 지점까지 도착했다면
+//			System.out.println("코스 완성");
+//			System.out.println(r+" "+c+" cnt:"+cnt);
+			if (cnt>=4 && maxCnt < cnt) {
+				maxCnt = cnt;
+			}
+			return;
+		}
+
+		for (int i = d; i < 4; i++) {
+			int nr = r + dr[i];
+			int nc = c + dc[i];
+			if (nr > sr && nr < N && nc >= 0 && nc < N && !visited[map[nr][nc]]) { // 범위안에 있고 아직 먹지않은 디저트라면
+				dfs(cnt + 1, sr, sc, nr, nc, visited, i); // 카운트+1하고 방향 그대로
+				visited[map[nr][nc]] = false;	// 리턴했으면 방문 체크 해제
+			}
+		}
+	}
+
+}
