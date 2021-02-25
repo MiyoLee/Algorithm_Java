@@ -1,0 +1,43 @@
+package com.ssafy.hwalgo14;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+// 단어 뒤집기
+public class BOJ_17413_S3 {
+	static String str;
+	static StringBuilder sb = new StringBuilder();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		str = br.readLine();
+		// 문자열 입력 완료.
+		int size = str.length();
+		for(int i=0; i<size; i++) {
+			if(str.charAt(i)=='<') {		//태그 등장하면, > 나올때까지 그대로 sb에 append.
+				while(str.charAt(i)!='>') {	
+					sb.append(str.charAt(i));
+					i++;
+				}
+				sb.append('>');
+				continue;
+			}
+			// i :현재 시작 위치..
+			int k=i;
+			while(k<size && str.charAt(k)!=' ' && str.charAt(k)!='<')k++;
+				
+			for(int j=k-1; j>=i; j--) {
+					sb.append(str.charAt(j));
+			}
+			if(k<size && str.charAt(k)==' ') {
+				sb.append(" ");
+				i=k;
+			}
+			else if(k<size && str.charAt(k)=='<')i=k-1;
+			else break;
+		}
+		
+		System.out.println(sb);
+	}
+	
+}
