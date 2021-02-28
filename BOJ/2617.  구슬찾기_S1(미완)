@@ -1,0 +1,69 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+//구슬 찾기
+public class BOJ_2617_S1 {
+	static int N, M; // 구슬의 개수, 저울에 올려본 쌍의 개수
+	static int[][] weight; // 구슬들의 무게정보를 입력하는 배열
+	static int[] heavier; 	// 나보다 무거운 구슬의 수
+	static int[] lighter;	// 나보다 가벼운 구슬의 수
+	
+	static StringBuilder sb = new StringBuilder();
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		heavier = new int[N + 1]; // 구슬 1번 부터 N번까지.
+		lighter = new int[N + 1]; // 구슬 1번 부터 N번까지.
+		weight = new int[M][2];
+
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			weight[i][0] = Integer.parseInt(st.nextToken());
+			weight[i][1] = Integer.parseInt(st.nextToken());
+		}
+		// 입력 다받음
+		
+		for(int i=1; i<=N; i++) {
+			System.out.println(hdfs(i)+" "+ldfs(i));
+		}
+		
+		
+//		for(int i=1; i<count.length; i++) {
+//			if(count[i][0] > N/2 || count[i][1] > N/2) {
+//				sb.append(i).append("\n");
+//			}
+//		}
+//		System.out.println(sb);
+	}
+
+	// 나보다 더 무거운 구슬 수 구하는 함수
+	public static int hdfs(int n) {
+		int result=1;
+		for (int i = 0; i < weight.length; i++) {
+			if (weight[i][1] == n) { // 내가 가벼운쪽이라면
+				result += hdfs(weight[i][0]);
+			}
+		}
+		return result;
+	}
+
+	// 나보다 더 가벼운 구슬 수 구하는 함수
+	public static int ldfs(int n) {
+		int result=1;
+		for (int i = 0; i < weight.length; i++) {
+			if (weight[i][1] == n) { // 내가 가벼운쪽이라면
+				result += hdfs(weight[i][0]);
+			}
+		}
+		return result;
+	}
+}
