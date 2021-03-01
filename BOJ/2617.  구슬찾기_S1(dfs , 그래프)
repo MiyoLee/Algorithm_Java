@@ -1,0 +1,84 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
+
+//구슬 찾기
+public class BOJ_2617_S1 {
+	static int N, M; 			// 구슬의 개수, 저울에 올려본 쌍의 개수
+	static HashMap<Integer, List<Integer>> hmap = new HashMap<>();		
+	static HashMap<Integer, List<Integer>> lmap = new HashMap<>();
+	
+	static int cnt;
+	static int ans;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		for (int i=1; i<=N; i++) {
+			hmap.put(i, new ArrayList<Integer>());
+			lmap.put(i, new ArrayList<Integer>());
+		}
+		
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int h = Integer.parseInt(st.nextToken());
+			int l = Integer.parseInt(st.nextToken());
+			hmap.get(l).add(h);		//나보다 무거운 구슬이 자식
+			lmap.get(h).add(l);		//나보다 가벼운 구슬이 자식.
+		}
+		// 입력 다받음
+		
+		for(int i=1; i<=N; i++) {
+			cnt=0;
+			hdfs(i, new boolean[N+1]);
+			if(cnt>N/2) {
+				ans++;
+				continue;
+			}
+			
+			cnt=0;
+			ldfs(i, new boolean[N+1]);
+			if(cnt>N/2) {
+				ans++;
+				continue;
+			}
+		}
+		
+		System.out.println(ans);
+	}
+
+	// 나보다 더 무거운 구슬 수 구하는 함수
+	public static void hdfs(int n, boolean[] visited) {
+		if(cnt > N/2)return;
+		for(int i=0; i<hmap.get(n).size(); i++) {
+			int nn = hmap.get(n).get(i);
+			if(!visited[nn]) {
+				visited[nn] = true;
+				++cnt;
+				hdfs(nn, visited);
+			}
+		}
+	}
+
+	// 나보다 더 가벼운 구슬 수 구하는 함수
+	public static void ldfs(int n, boolean[] visited) {
+		if(cnt > N/2)return;
+		for(int i=0; i<lmap.get(n).size(); i++) {
+			int nn = lmap.get(n).get(i);
+			if(!visited[nn]) {
+				visited[nn] = true;
+				++cnt;
+				ldfs(nn, visited);
+			}
+		}
+	}
+}
