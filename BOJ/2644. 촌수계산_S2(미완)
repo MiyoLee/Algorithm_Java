@@ -1,0 +1,69 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+//촌수 계산
+public class BOJ_2644_S2 {
+	static int N,M;		//전체 사람의 수, 관계의 수
+	static int a,b;
+	static int[] parent;
+	static HashMap<Integer,ArrayList<Integer>> anc = new HashMap<>();		//key : 자식 , value: 조상들의 목록
+	static int ans;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		N = Integer.parseInt(br.readLine());
+		
+		parent = new int[N+1];						//부모 노드를 저장.
+		
+		st = new StringTokenizer(br.readLine());
+		a = Integer.parseInt(st.nextToken());		//a와 b의 촌수를 계산해야됨.
+		b = Integer.parseInt(st.nextToken());
+		
+		M = Integer.parseInt(br.readLine());		//관계의 수
+		
+		
+		for(int i=1; i<=N; i++) {
+			anc.put(i, new ArrayList<>());
+		}
+		
+		for(int i=0; i<M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int p = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			parent[c]=p;
+			anc.get(c).add(p);
+		};
+		
+		//입력 완료
+		
+		ans=-1;
+		//a와 b의 촌수 계산
+		if(parent[a]==b || parent[b]==a) ans=1;		//부모-자식 관계라면 1.
+		else {
+			int acnt=0;
+			int bcnt=0;
+			while(true) {
+				a=parent[a];	//부모로 올라감
+				acnt++;
+				if(parent[a] == parent[b]) {
+					break;
+				}
+				b=parent[b];	//부모로 올라감
+				bcnt++;
+				if(parent[a] == parent[b]) {
+					break;
+				}
+			}
+		}
+		System.out.println(ans);
+	}
+	
+}
