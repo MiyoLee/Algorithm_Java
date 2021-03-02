@@ -13,7 +13,8 @@ public class BOJ_2644_S2 {
 	static int N,M;		//전체 사람의 수, 관계의 수
 	static int a,b;
 	static int[] parent;
-	static HashMap<Integer,ArrayList<Integer>> anc = new HashMap<>();		//key : 자식 , value: 조상들의 목록
+	static HashMap<Integer,ArrayList<Integer>> fam = new HashMap<>();		//key : 부모 , value: 자식 목록
+	static boolean[] visited;
 	static int ans;
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -30,8 +31,8 @@ public class BOJ_2644_S2 {
 		M = Integer.parseInt(br.readLine());		//관계의 수
 		
 		
-		for(int i=1; i<=N; i++) {
-			anc.put(i, new ArrayList<>());
+		for(int i=0; i<=N; i++) {
+			fam.put(i, new ArrayList<>());
 		}
 		
 		for(int i=0; i<M; i++) {
@@ -39,31 +40,34 @@ public class BOJ_2644_S2 {
 			int p = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
 			parent[c]=p;
-			anc.get(c).add(p);
+			fam.get(p).add(c);
 		};
 		
 		//입력 완료
 		
-		ans=-1;
+		visited = new boolean[N+1];
 		//a와 b의 촌수 계산
-		if(parent[a]==b || parent[b]==a) ans=1;		//부모-자식 관계라면 1.
-		else {
-			int acnt=0;
-			int bcnt=0;
-			while(true) {
-				a=parent[a];	//부모로 올라감
-				acnt++;
-				if(parent[a] == parent[b]) {
-					break;
-				}
-				b=parent[b];	//부모로 올라감
-				bcnt++;
-				if(parent[a] == parent[b]) {
-					break;
-				}
-			}
-		}
+		ans=-1;
+		
+		visited[a]=true;
+		calc(0, a);
+		
 		System.out.println(ans);
 	}
-	
+	public static void calc(int cnt, int cur) {
+		visited[cur]=true;
+		if(cur==b) {
+			ans=cnt;
+			return;
+		}
+		
+		for(int i=0; i<fam.get(cur).size(); i++) {
+			if(!visited[fam.get(cur).get(i)]) {
+				calc(cnt+1, fam.get(cur).get(i));
+			}
+		}
+		if(parent[cur]!=0 && !visited[parent[cur]]) {
+			calc(cnt+1, parent[cur]);
+		}
+	}
 }
