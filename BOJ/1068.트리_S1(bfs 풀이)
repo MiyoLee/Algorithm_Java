@@ -1,0 +1,76 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+//트리
+public class BOJ_1068_S1 {
+	static int N;
+	static int deleteNode;
+	static int leafcnt;
+	static int[] parent;
+	static boolean[]isDeleted;
+	
+	static HashMap<Integer, ArrayList<Integer>> children = new HashMap<>();
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());		//노드의 갯수 입력
+		
+		parent = new int[N]; 
+		
+		for(int i=0; i<N; i++) {
+			children.put(i,new ArrayList<Integer>());
+		}
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());	//0~N-1 노드의 부모 노드 입력.
+		for(int i=0; i<N;  i++) {	
+			int p=Integer.parseInt(st.nextToken());
+			if(p!=-1) {
+				children.get(p).add(i);
+			}
+			parent[i]=p;
+		}
+		deleteNode = Integer.parseInt(br.readLine());		//지울 노드 번호 입력
+		// 입력 완료
+		
+		bfs(deleteNode);
+		
+		for(Integer key : children.keySet()) {
+			if(!isDeleted[key] && children.get(key).size()==0)leafcnt++;
+		}
+		
+		System.out.println(leafcnt);
+	}
+	
+	
+	//node 노드 지우는 함수
+	public static void bfs(int node) {				//node : 삭제할 노드
+		isDeleted = new boolean[N];
+		Queue<Integer>q = new LinkedList<>();
+		
+		q.offer(node);
+		while(!q.isEmpty()) {
+			int nextNode = q.poll();
+			//삭제 처리.
+			isDeleted[nextNode] = true;		
+			for(int j=0; j<children.size(); j++) {
+				if(children.get(j).contains((Integer)nextNode)) {	
+					children.get(j).remove((Integer)nextNode);
+				}
+			}
+			//삭제 처리
+		for(int i=0; i<children.get(nextNode).size(); i++) {		//자식 탐색
+				q.offer(children.get(nextNode).get(i));
+			}
+		}
+	}
+	
+}
