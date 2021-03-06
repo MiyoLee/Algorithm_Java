@@ -1,0 +1,62 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_1966_S3 {
+	static int N,M;
+	static Queue<Integer>q;
+	static int count;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int T = Integer.parseInt(st.nextToken());
+		for(int tc=1; tc<=T; tc++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());		//문서의 개수
+			M = Integer.parseInt(st.nextToken());		//몇번째로 출력되는지 궁금한 문서의 현재 큐에 들어있는 위치(0~N-1)
+			
+			st = new StringTokenizer(br.readLine());
+			q = new LinkedList<>();
+			
+			for(int i=0; i<N; i++) {
+				int doc = Integer.parseInt(st.nextToken());
+				if(i==M) {		// M번째 문서 즉, 우선순위를 구하고싶은 원소라면
+					
+				}
+				q.offer(doc);
+				
+			}
+			//입력 완료.
+			count = 0;		//뽑아낸 문서의 개수.
+			
+			while(!q.isEmpty()) {
+				int qSize = q.size();
+				int curDoc = q.poll();	//일단 뽑아냄.
+				M--;					//구하고자 하는 값은 한칸 앞으로 이동.
+				
+				for(int d : q) {			//큐를 순회
+					if(d > curDoc) {		//현재 문서보다 우선순위가 높은 문서가 있다면
+						q.offer(curDoc);	//끝에 다시 집어넣음.
+						break;				
+					}
+				}
+				if(q.size() < qSize) {	//다시 안집어넣었다면
+					count++;			//뽑아낸 문서 수 +1
+					if(M==-1) {			//뽑아낸 문서가 구하고자하는 그 문서라면 break;		
+						break;
+					}
+				}
+				else if(M==-1){					//다시 집어넣었다면
+					M=q.size()-1;					//맨 마지막 위치로.
+				}
+			}
+			System.out.println(count);
+		}
+	}
+}
