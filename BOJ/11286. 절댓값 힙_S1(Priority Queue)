@@ -1,0 +1,54 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+
+class Number implements Comparable<Number>{
+	long data;
+	
+	public Number(long data) {
+		super();
+		this.data = data;
+	}
+
+	@Override
+	public int compareTo(Number o) {
+		// TODO Auto-generated method stub
+		long diff = Math.abs(this.data)-Math.abs(o.data);
+		if(diff==0) return this.data-o.data > 0 ? 1 : -1;			//절댓값이 같다면 오름차순
+		else{													//절댓값이 다르다면 절댓값 오름차순
+			return diff > 0 ? 1:-1;
+		}
+	}
+}
+public class BOJ_11286_S1 {
+	static long[] input;
+	static PriorityQueue<Number> pq = new PriorityQueue<>();
+	static StringBuilder sb = new StringBuilder();
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		input = new long[N];
+		for(int i=0; i<N; i++) {
+			input[i]=Long.parseLong(br.readLine());
+		}
+		//입력 완료.
+		for(int i=0; i<input.length; i++) {
+			if(input[i]!=0) {		//0이 아니라면 pq에 추가.
+				pq.add(new Number(input[i]));			
+			}
+			else {	//0이라면 리스트에서 절댓값이 가장 작은수  remove
+				if(pq.isEmpty()) sb.append(0).append("\n");		//pq가 비어있으면 0출력
+				else {
+					sb.append(pq.poll().data).append("\n");		//출력에 추가.
+				}
+			}
+		}
+		sb.setLength(sb.length()-1);
+		System.out.println(sb);
+	}
+}
