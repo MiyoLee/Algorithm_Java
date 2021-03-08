@@ -1,0 +1,37 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+//dp로 풀어야함.
+public class BOJ_14501_S4 {
+	static int N;
+	static int[] T;
+	static int[] P;
+	static boolean[] notPossible;
+	static int maxPrice = 0;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		N = Integer.parseInt(br.readLine());
+		T = new int[N+1];
+		P = new int[N+1];
+		notPossible = new boolean[N+1];
+		
+		for(int i=1; i<=N; i++) {
+			st = new StringTokenizer(br.readLine());
+			T[i]=Integer.parseInt(st.nextToken());		//상담 완료하는데 필요한 기간
+			P[i]=Integer.parseInt(st.nextToken());		//상담 금액
+			if(i+T[i]-1 > N) notPossible[i]=true;	
+		}
+		//입력 완료
+		
+		System.out.println(maxPrice);
+	}
+	
+}
