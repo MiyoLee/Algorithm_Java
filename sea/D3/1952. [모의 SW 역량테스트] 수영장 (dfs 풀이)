@@ -1,0 +1,49 @@
+package swea;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class SWEA_1952_A형모의 {
+	static int[] price;		//1일, 한달, 세달, 1년 이용권 요금
+	static int[] plan;		//1월 ~ 12월 수영 계획
+	static int ans;
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		int T = Integer.parseInt(br.readLine());		//테케 수
+		for(int tc=1; tc<=T; tc++) {
+			// 이용권 가격 입력
+			price = new int[4];		//1일, 한달, 세달, 1년 이용권 요금
+			st = new StringTokenizer(br.readLine());
+			for(int i=0; i<4; i++) {
+				price[i]=Integer.parseInt(st.nextToken());
+			}
+			// 수영 계획 입력
+			plan = new int[13];		//1월~12월 
+			st = new StringTokenizer(br.readLine());
+			for(int i=1; i<=12; i++) {
+				plan[i]=Integer.parseInt(st.nextToken());
+			}
+			// 입력 완료
+			ans = Integer.MAX_VALUE;
+			dfs(1,0);
+			System.out.println("#"+tc+" "+ans);
+		}
+	}
+	public static void dfs(int month, int sum) {	//현재 월, 지금까지 가격합
+		if(month>12) {
+			if(sum<ans)ans=sum;
+			return;
+		}
+		if(plan[month] == 0) dfs(month+1,sum);
+		else {
+			dfs(13, sum+price[3]);			//1년 이용권 구매
+			dfs(month+3, sum+price[2]);		//세달 이용권 구매
+			dfs(month+1, sum+Math.min(plan[month]*price[0], price[1])); 	//하루 or 한달이용권 구매
+		}
+	}
+}
