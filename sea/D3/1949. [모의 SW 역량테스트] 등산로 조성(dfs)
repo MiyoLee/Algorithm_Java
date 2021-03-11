@@ -1,0 +1,99 @@
+package swea;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+//등산로 조성 
+class Pos{
+	int r,c;
+
+	public Pos(int r, int c) {
+		super();
+		this.r = r;
+		this.c = c;
+	}
+
+	@Override
+	public String toString() {
+		return "Pos [r=" + r + ", c=" + c + "]";
+	}
+	
+}
+public class SWEA_1949_A형모의 {
+	static int N,K;
+	static int[][] map;
+	static int maxheight;		//가장 높은 봉우리의 높이
+	static List<Pos>start;
+	static int[] dr = {-1,1,0,0};		//상하좌우
+	static int[] dc = {0,0,-1,1};
+	static int maxlen;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		int T = Integer.parseInt(br.readLine());		//테케 수
+		for(int tc=1; tc<=T; tc++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			K = Integer.parseInt(st.nextToken());
+			
+			map = new int[N][N];
+			maxheight=0;
+			start = new ArrayList<>();
+			for(int i=0; i<N; i++) {
+				st = new StringTokenizer(br.readLine());
+				for(int j=0; j<N; j++) {
+					map[i][j]=Integer.parseInt(st.nextToken());
+					maxheight = maxheight < map[i][j] ? map[i][j]:maxheight;
+				}
+			}
+			//입력 완료
+			
+			//시작점이 될 수 있는 위치들 start에 저장
+			for(int i=0; i<N; i++) {
+				for(int j=0; j<N; j++) {
+					if(map[i][j]==maxheight) start.add(new Pos(i,j));
+				}
+			}
+			
+			maxlen=0;
+			for(int i=0; i<start.size(); i++) {
+				Pos p = start.get(i);
+				dfs(p.r, p.c, 1, true, new boolean[N][N]);
+			}
+			System.out.println("#"+tc+" "+maxlen);
+		}
+	}
+	
+	//현재 위치, 현재가지 길이, 깎음 횟수가 남아있는지 체크하는배열
+	public static void dfs(int r, int c, int len, boolean k, boolean[][] visited) {	
+		visited[r][c]=true;		//현재 위치 방문 표시.
+		
+		if(len>maxlen)maxlen=len;
+		
+		for(int d=0; d<4; d++) {
+			int nr = r+dr[d];
+			int nc = c+dc[d];
+			if(nr>=0 && nr<N && nc>=0 && nc<N && !visited[nr][nc]) {
+				if(map[nr][nc] < map[r][c]) {		//현재 높이보다 낮으면 이동.
+					dfs(nr,nc,len+1,k,visited);
+					visited[nr][nc]=false;			//다른경로를 통해 접근 가능하도록. 방문 지움
+				}
+				else if ( k && map[nr][nc]-K < map[r][c]){		//깎는 횟수가 남아있고 깎으면 이동 가능한 높이라면
+					int tmp=map[nr][nc];
+					map[nr][nc]=map[r][c]-1;		//깎고,
+					k=false;						//깎음 기회 없음 표시
+					dfs(nr,nc,len+1,k,visited);
+					visited[nr][nc]=false;			//방문 취소
+					map[nr][nc]=tmp;				//깎은거 되돌려놈
+					k=true;							//깎음 기회 생김
+				}
+			}
+		}
+	}
+}
