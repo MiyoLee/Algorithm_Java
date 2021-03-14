@@ -1,0 +1,76 @@
+package swea;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+//물놀이를 가자
+public class SWEA_10966_D4 {
+	static int N,M;
+	static char[][] map;
+	static int ans;
+	static List<Pos>water;
+	static int[] dr = {-1,1,0,0};	//상하좌우
+	static int[] dc = {0,0,-1,1};	//상하좌우
+	
+	static class Pos{
+		int r,c;
+
+		public Pos(int r, int c) {
+			super();
+			this.r = r;
+			this.c = c;
+		}
+	}
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		int T = Integer.parseInt(br.readLine());
+		for(int tc=1; tc<=T; tc++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			map = new char[N][M];
+			water = new ArrayList<>();		//W인 좌표
+			for(int i=0; i<N; i++) {
+				String tmp = br.readLine();
+				for(int j=0; j<M; j++) {
+					map[i][j]=tmp.charAt(j);
+					if(map[i][j]=='W')water.add(new Pos(i,j));	
+				}	
+			}
+			//입력 완료
+			ans=0;
+			
+			Queue<Pos>q = new LinkedList<>();
+			int dist[][] = new int[N][M];
+			
+			for(int w=0; w<water.size(); w++) {		//모든 W의 위치에서 동시에 BFS 출
+				q.offer(water.get(w));
+				dist[water.get(w).r][water.get(w).c]=0;
+			}
+			
+			while(!q.isEmpty()) {
+				Pos wp = q.poll();
+				int cr = wp.r;
+				int cc = wp.c;
+				for(int d=0; d<4; d++) {
+					int nr = cr+dr[d];
+					int nc = cc+dc[d];
+					if(nr>=0 && nr<N && nc>=0 && nc<M && map[nr][nc]=='L' && dist[nr][nc]==0) {	
+						dist[nr][nc]=dist[cr][cc]+1;
+						ans+=dist[nr][nc];
+						q.offer(new Pos(nr,nc));
+					}
+				}
+			}
+			System.out.println("#"+tc+" "+ans);
+		}
+	}
+}
