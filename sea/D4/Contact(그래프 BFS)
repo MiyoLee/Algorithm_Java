@@ -1,0 +1,73 @@
+package ssafy_algo_0316;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+//그래프 bfs
+public class SWEA_1238_D4 {
+	static int[][] ad;
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		for(int tc=1;tc<=10; tc++) {
+			st = new StringTokenizer(br.readLine());
+			int dataLength = Integer.parseInt(st.nextToken());
+			int startNode = Integer.parseInt(st.nextToken());		//처음 전화 돌리는 사람의 번호
+			
+			ad = new int[101][101];		//1~100
+			
+			st = new StringTokenizer(br.readLine());
+			while(st.hasMoreTokens()) {
+				ad[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())]=1;
+			}
+			//입력 완료
+
+			//bfs탐색
+			
+			List<Integer>endNodes = new ArrayList<>();
+			boolean[] visited = new boolean[101];		//1~100
+			int[] order = new int[101];		//1~100 연락 받는 순서.
+			
+			Queue<Integer>q = new LinkedList<>();
+			
+			order[startNode]=1;
+			visited[startNode]=true;
+			q.offer(startNode);
+			
+			int curorder=1;
+			while(!q.isEmpty()) {
+				int cur = q.poll();
+				if(order[cur]==curorder) {
+					endNodes.add(cur);
+				}
+				if(order[cur]>curorder) {
+					endNodes.clear();
+					endNodes.add(cur);
+					curorder = order[cur];
+				}
+				
+				for(int i=1; i<=100; i++) {
+					if(ad[cur][i]==1 && !visited[i]) {
+						visited[i]=true;
+						order[i]=order[cur]+1;
+						q.offer(i);
+					}
+				}
+			}
+			
+			//마지막 순서로 연락받는 노드 중 가장 큰 노드 구하기
+			int max=0;
+			for(int n : endNodes) {
+				if(n > max) max = n;
+			}
+			System.out.println("#"+tc+" "+max);
+		}
+	}
+}
