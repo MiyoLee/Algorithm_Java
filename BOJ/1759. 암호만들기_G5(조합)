@@ -1,0 +1,59 @@
+package com.ssafy.hwalgo15;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+//암호만들기
+public class BOJ_1759_G5 {
+	static int L, C;
+	static List<Character> chars;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		L = Integer.parseInt(st.nextToken()); // 암호의 길이
+		C = Integer.parseInt(st.nextToken());
+		chars = new ArrayList<>();
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < C; i++) {
+			chars.add(st.nextToken().charAt(0));
+		}
+		// 입력 완료
+		chars.sort(null); // 정렬
+
+		// 암호 : 최소 한개의 모음과 최소 두개의 자음으로 이루어져있음
+		Comb(0, new char[L], 0);
+	}
+
+	private static void Comb(int cnt, char[] selected, int startIdx) {
+		if (cnt == L) {		//비밀번호 완성
+			int mo = 0; 	//모음의 수
+			int ja = 0;		//자음의 수
+			for (int i = 0; i < L; i++) {
+				if (selected[i] == 'a' || selected[i] == 'e' || selected[i] == 'i' || selected[i] == 'o'
+						|| selected[i] == 'u') { // 모음
+					mo++;
+				} else
+					ja++;
+			}
+			if (mo >= 1 && ja >= 2) {
+				// 정답 출력
+				for (int i = 0; i < L; i++) {
+					System.out.print(selected[i]);
+				}
+				System.out.println();
+			}
+			return;
+		}
+		for (int i = startIdx; i < chars.size(); i++) {
+			selected[cnt] = chars.get(i);
+			Comb(cnt+1, selected, i+1);
+		}
+	}
+}
