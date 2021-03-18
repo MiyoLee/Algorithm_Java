@@ -1,0 +1,59 @@
+package ssafy_algo_0318;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class JO_1863 {
+	static int N,M;
+	static int[][] pair;
+	static int[] parents;
+	static int ans;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());	//학생의 수
+		M = Integer.parseInt(st.nextToken());	//주어지는 학생 쌍의 수
+		pair = new int[M][2];
+		parents = new int[N+1];		//1번~N번
+		
+		for(int i=0; i<M; i++) {
+			st = new StringTokenizer(br.readLine());
+			pair[i][0]=Integer.parseInt(st.nextToken());
+			pair[i][1]=Integer.parseInt(st.nextToken());
+		}
+		//입력 완료
+		
+		//종교의 가짓수를 출력한다.
+		
+		make();						//N개의 단위 집합 생성
+		
+		for(int i=0; i<M; i++) {	//나오는 쌍들을 합집합한다.
+			union(pair[i][0], pair[i][1]);
+		}
+		
+		ans=0;
+		for(int i=1; i<=N; i++) {	//학생 중 루트의 갯수를 출력한다.
+			if(i == parents[i])ans++;
+		}
+		System.out.println(ans);
+	}
+	private static void make() {
+		for(int i=1; i<=N; i++) {
+			parents[i]=i;
+		}
+	}
+	private static int findSet(int a) {
+		if(a==parents[a])return a;
+		return findSet(parents[a]);
+	}
+	private static boolean union(int a, int b) {
+		int aRoot = findSet(a);
+		int bRoot = findSet(b);
+		if(aRoot == bRoot) return false;
+		parents[b]=parents[bRoot]=aRoot;		//합친다.
+		return true;
+	}
+}
