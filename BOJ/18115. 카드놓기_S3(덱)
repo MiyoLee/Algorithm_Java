@@ -1,0 +1,51 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class BOJ_18115_S3 {
+	static int N;
+	static int[] skill;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		N = Integer.parseInt(br.readLine());
+		skill = new int[N + 1]; // 1번째 ~N번째
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <= N; i++) {
+			skill[i] = Integer.parseInt(st.nextToken());
+		}
+		// 입력 완료.
+		Deque<Integer> card = new ArrayDeque<>(); // 수현이가 들고있는 카드. 0이 제일 위.
+		for (int i = N; i >= 1; i--) { // 카드 놓은 기술 역순으로 탐색. 가장 위에 놓여있는 카드를 놓을때 썼던 기술이다.
+			int cur = N - i + 1;
+			switch (skill[i]) {
+			case 1:
+				card.push(cur); break;	// 제일 위의 카드를 놓은것임. 다시 카드를 제일 위에 놓자.
+			case 2:
+				int tmp = card.pop();	// 위에서 두번째 카드를 바닥에 놓은거임. 다시 카드를 위에서 두번째 위치에 놓자.
+				card.push(cur); 
+				card.push(tmp);
+				break;
+			case 3:
+				card.add(cur); break;// 제일 밑에있는 카드를 놓은거임. 다시 카드를 제일 밑에 놓자.
+			default: break; 
+			}
+		}
+		//정답 출력
+		StringBuilder sb = new StringBuilder();
+		for(int c : card) {
+			sb.append(c).append(" ");
+		}
+		sb.setLength(sb.length()-1);
+		System.out.println(sb);
+	}
+}
