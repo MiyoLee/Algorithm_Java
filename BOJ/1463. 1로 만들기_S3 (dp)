@@ -1,0 +1,31 @@
+package com.ssafy.algo_0323;
+
+import java.util.Scanner;
+
+public class BOJ_1463_S3 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		int[] dp = new int[N + 1]; // 1~N
+		dp[1] = 0;
+		for (int i = 2; i <= N; i++) {
+			// 2의배수이고 3의배수 아닐때
+			if (i % 2 == 0 && i % 3 != 0) {
+				dp[i] = 1 + Math.min(dp[i / 2], dp[i - 1]);
+			}
+			// 3의배수이고 2의배수 아닐때
+			else if (i % 3 == 0 && i % 2 != 0) {
+				dp[i] = 1 + Math.min(dp[i / 3], dp[i - 1]);
+			}
+			// 6의배수일때
+			else if (i % 6 == 0) {
+				dp[i] = 1 + Math.min(Math.min(dp[i / 2], dp[i / 3]), dp[i - 1]);
+			}
+			// 다 아닐때
+			else {
+				dp[i] = 1 + dp[i-1];
+			}
+		}
+		System.out.println(dp[N]);
+	}
+}
