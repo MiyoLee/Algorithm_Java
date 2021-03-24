@@ -17,16 +17,6 @@ public class BOJ_2636_G5 {
 			this.r = r;
 			this.c = c;
 		}
-
-		@Override
-		public String toString() {
-			return "Pos [r=" + r + ", c=" + c + "]";
-		}
-		@Override
-		public boolean equals(Object obj) {
-			Pos other = (Pos) obj;
-			return this.r==other.r && this.c==other.c;
-		}
 	}
 
 	static int N, M; // 판의 세로 가로
