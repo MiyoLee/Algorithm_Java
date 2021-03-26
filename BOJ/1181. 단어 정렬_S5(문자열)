@@ -1,0 +1,47 @@
+package ssafy_algo_0326;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+public class BOJ_1181_S5 {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		Word[] words = new Word[N];
+		for(int i=0; i<N; i++) {
+			words[i] = new Word(br.readLine());
+		}
+		//입력 완료
+		Arrays.sort(words);
+		for(Word w : words) {
+			if(!w.duplicated) {
+				System.out.println(w.str);
+			}
+		}
+	}
+	static class Word implements Comparable<Word>{
+		String str;
+		int len;
+		boolean duplicated;
+		public Word(String str) {
+			super();
+			this.str = str;
+			this.len = str.length();
+			this.duplicated = false;
+		}
+		@Override
+		public int compareTo(Word o) {
+			int diff = Integer.compare(this.len, o.len);
+			if(diff!=0)return diff;			//길이가 다르다
+			else if(this.str.compareTo(o.str)!=0) {		//길이는 같고 str은 다르다면
+				return this.str.compareTo(o.str);
+			}
+			else {			//길이도 같고 str도 같다면
+				duplicated=true;
+				return 0;
+			}
+		}
+	}
+}
