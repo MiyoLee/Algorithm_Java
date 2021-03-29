@@ -1,0 +1,69 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Algo1_서울_09반_이미요 {
+	static int M,N;
+
+	static class Number implements Comparable<Number>{
+		int num;		//자연수
+		String str;		//String으로 변환한 값. ex) eight nine
+		
+		public Number(int num) {		//자연수를 매개변수로 받는 생성자
+			super();
+			this.num = num;
+			String tmp = Integer.toString(num);
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i<tmp.length(); i++) {			//num -> str 변환
+				switch(tmp.charAt(i)) {
+					case '0' : sb.append("zero").append(" "); 	break;
+					case '1' : sb.append("one").append(" ");	break;
+					case '2' : sb.append("two").append(" ");	break;
+					case '3' : sb.append("three").append(" ");	break;
+					case '4' : sb.append("four").append(" ");	break;
+					case '5' : sb.append("five").append(" ");	break;
+					case '6' : sb.append("six").append(" ");	break;
+					case '7' : sb.append("seven").append(" ");	break;
+					case '8' : sb.append("eight").append(" ");	break;
+					case '9' : sb.append("nine").append(" ");	break;
+					default: continue;
+				}
+			}
+			sb.setLength(sb.length()-1);		//마지막의 공백문자 지움
+			this.str = sb.toString();			
+		}
+
+		@Override
+		public int compareTo(Number o) {		//str 오름차순으로 정렬
+			return this.str.compareTo(o.str);
+		}
+
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		Number[] numbers = new Number[M-N+1];
+		
+		//N이상 M이하 숫자를 영어로 바꿨을때 사전순으로 나열하여 출력하시오.
+		int idx=0;
+		for(int i=N; i<=M; i++) {			
+			numbers[idx++]=new Number(i);		//Number객체 생성하여 배열에 저장
+		}
+		
+		Arrays.sort(numbers);					//Number 클래스의 compareTo 함수에 따라 정렬
+		
+		
+		//10개씩 정답 출력
+		int cnt=0;
+		for(Number n : numbers) {		
+			if(cnt!=0 && cnt%10==0)System.out.println();	
+			System.out.print(n.num+" ");
+			cnt++;
+		}
+	}
+}
