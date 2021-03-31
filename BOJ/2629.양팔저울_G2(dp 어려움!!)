@@ -1,0 +1,69 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Algo2_서울_09반_이미요 {
+	static int N, M; // 추의 개수<=30, 구슬의 개수<=7
+	static int[] chu; // 가지고 있는 추들의 무게
+	static int[] marble; // 확인할 구슬들의 무게
+	static boolean[][] dp; // i번 추까지 사용 가능할때, 무게 j 를 만들수 있는지 여부
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		N = Integer.parseInt(br.readLine());
+		chu = new int[N + 1];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <= N; i++) {
+			chu[i] = Integer.parseInt(st.nextToken());
+		}
+
+		M = Integer.parseInt(br.readLine());
+		marble = new int[M];
+		//int sum = 0;
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < M; i++) {
+			marble[i] = Integer.parseInt(st.nextToken());
+			//sum+=marble[i];
+		}
+
+		// 입력 완료.
+		dp = new boolean[N + 1][40001]; // 추의 최대 갯수:0~N, 추의 최대 무게 합 : 0~max
+
+		dp[0][0] = true; // 추 0개로 무게 0 만들 수 있다.
+		for (int i = 1; i <= N; i++) { // i번 추까지 사용 가능할때
+			for (int j = 0; j <= 15000 ; j++) { // j무게를 만들수 있나?
+				
+				// 1. dp[i-1][j]=true 인 경우
+				if (dp[i - 1][j]) {
+					dp[i][j] = true;
+				}
+
+				// 2. dp[i-1][j]=false 인 경우
+				else {
+					if (dp[i - 1][Math.abs(j - chu[i])] || dp[i - 1][j + chu[i]]) {
+						dp[i][j] = true;
+					} else {
+						dp[i][j] = false;
+					}
+				}
+			}
+		}
+
+		// 정답 출력
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < marble.length; i++) {
+			if (marble[i] > 15000)
+				sb.append("N").append(" ");
+			else {
+				if (dp[N][marble[i]])
+					sb.append("Y").append(" ");
+				else
+					sb.append("N").append(" ");
+			}
+		}
+		sb.setLength(sb.length() - 1);
+		System.out.println(sb);
+	}
+}
