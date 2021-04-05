@@ -1,0 +1,85 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M; // map 크기, 고를 치킨집 수
+	static int[][] map;
+	static int totalCnt = 0; // 원래 치킨 집 총 개수
+	static List<Pos> chicken; // 치킨집의 위치정보 저장할 리스트.
+	static List<Pos> home;
+	static int ans;
+	static class Pos {
+		int r, c;
+
+		public Pos(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+
+	}
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken()); // 폐업시키지 않을 치킨집 개수
+
+		map = new int[N][N]; // 그냥 인덱스 0부터 ~~..0은 빈 칸, 1은 집, 2는 치킨집
+		chicken = new ArrayList<>();
+		home = new ArrayList<>();
+
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if (map[i][j] == 2) { // 치킨집
+					chicken.add(new Pos(i, j));
+					totalCnt++;
+				} else if (map[i][j] == 1) { // 집
+					home.add(new Pos(i, j));
+				}
+			}
+		}
+		// 입력 완료
+		ans = Integer.MAX_VALUE;
+		Comb(0, new boolean[totalCnt], 0);
+		System.out.println(ans);
+	}
+
+	// totalCnt중 M개를 고르는 모든 조합 구하는 함수
+	public static void Comb(int cnt, boolean[] isSelected, int start) {
+		if (cnt == M) { // M개를 모두 골랐을 경우
+			int cd = cal(isSelected); // cd:치킨 거리
+			if(cd<ans)ans=cd;
+			return;
+		}
+		for (int i = start; i < chicken.size(); i++) {
+			isSelected[i] = true; // 치킨집 선택.
+			Comb(cnt + 1, isSelected, i + 1); // 선택한 치킨집 다음부터
+			isSelected[i] = false;
+		}
+	}
+
+	// isSelected의 치킨집들을 선택했을때, 도시의 치킨거리의 합을 리턴하는 함수
+	private static int cal(boolean[] isSelected) {
+		int dist = 0;
+		for (int i = 0; i < home.size(); i++) { // 집 순회
+			int min = Integer.MAX_VALUE;
+			for (int j = 0; j < isSelected.length; j++) { // 집마다 치킨집 순회
+				int tmp = 0;
+				if (isSelected[j] && (tmp = Math.abs(home.get(i).r - chicken.get(j).r)
+						+ Math.abs(home.get(i).c - chicken.get(j).c)) < min) {
+					min = tmp;
+				}
+			}
+			dist+=min;
+		}
+		return dist;
+	}
+}
