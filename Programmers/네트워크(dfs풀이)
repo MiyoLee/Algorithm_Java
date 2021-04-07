@@ -1,0 +1,27 @@
+import java.util.*;
+class Solution {
+    static int answer=0;
+    static boolean[] visited;
+    public int solution(int n, int[][] computers) {
+        
+        visited = new boolean[n];
+        //dfs로 탐색하자.
+        for(int i=0; i<n; i++){     //시작점 고르기
+            if(!visited[i]){
+                dfs(i, n, computers);
+                answer++;
+            }
+        }
+       
+        return answer;
+    }
+    private static void dfs(int cur, int n, int[][] computers){
+        visited[cur]=true;
+        
+        for(int i=0; i<n; i++){
+            if(!visited[i] && computers[cur][i]==1){
+                dfs(i,n,computers);
+            }
+        }
+    }
+}
