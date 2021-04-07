@@ -1,0 +1,69 @@
+import java.util.*;
+//bfs로 풀어보자.
+class Solution {
+    static int ans=100;
+    
+    //단어와 레벨을 저장하는 클래스
+    public static class Word{
+        String str;
+        int cnt;
+        public Word(String str, int cnt){
+            this.str = str;
+            this.cnt = cnt;
+        }
+    }
+    public int solution(String begin, String target, String[] words) {
+        //테스트 공간
+        
+        
+        //
+        
+        //1. word안에 target이 없어 변환이 불가능한 경우 0을 리턴한다.
+        boolean flag=false;
+        for(String s : words){
+            if(s.equals(target)){
+                flag=true;
+                break;
+            }
+        }
+        if(!flag) return 0;
+        //1 종료
+        
+        bfs(begin, target, words, new boolean[words.length]);
+        return ans;
+    }
+    
+    // 큐 사용해서 bfs하자.
+    private static void bfs(String begin, String target, String[] words, 
+                                                                boolean[] visited){
+        Queue<Word>q = new LinkedList<>();
+        q.offer(new Word(begin,0));
+        
+        while(!q.isEmpty()){
+            Word w = q.poll();
+            String cur = w.str;
+            int cnt = w.cnt;
+            if(cur.equals(target)){
+                ans=cnt;
+                return;
+            }
+            for(int i=0; i<words.length; i++){
+                if(!visited[i] && possible(cur,words[i])){
+                    visited[i]=true;
+                    q.offer(new Word(words[i],cnt+1));
+                }
+            }
+        }
+    }
+    
+    
+    //cur을 next로 변환할 수 있는지 여부 리턴하는 함수
+    public static boolean possible(String cur, String next){
+        int count=0;
+        for(int i=0; i<cur.length(); i++){
+            if(cur.charAt(i) != next.charAt(i))count++; //다른 글자 있으면 ++
+        }
+        if(count==1)return true;
+        else return false;
+    }
+}
