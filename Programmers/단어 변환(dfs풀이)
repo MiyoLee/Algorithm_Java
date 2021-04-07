@@ -1,0 +1,52 @@
+class Solution {
+    static int ans=100;
+    public int solution(String begin, String target, String[] words) {
+        //테스트 공간
+        
+        
+        //
+        
+        //1. word안에 target이 없어 변환이 불가능한 경우 0을 리턴한다.
+        boolean flag=false;
+        for(String s : words){
+            if(s.equals(target)){
+                flag=true;
+                break;
+            }
+        }
+        if(!flag) return 0;
+        //1 종료
+        dfs(0, begin, target, words, new boolean[words.length]);
+        
+        return ans;
+    }
+    
+    //현재까지 변환 횟수, 현재 단어, 타겟단어, words, 방문 체크
+    public static void dfs(int cnt, String cur, String target, String[] words, boolean[] visited){
+        // 기저조건
+        if(cur.equals(target)){     //타겟단어와 일치!
+            if(cnt<ans)ans=cnt;
+            return;
+        }
+        // 구현
+        
+        for(int i=0; i<words.length; i++){
+            if(!visited[i] && possible(cur,words[i])){
+                visited[i]=true;
+                dfs(cnt+1, words[i], target, words, visited);
+                visited[i]=false;
+            }
+        }
+        
+    }
+    
+    //cur을 next로 변환할 수 있는지 여부 리턴하는 함수
+    public static boolean possible(String cur, String next){
+        int count=0;
+        for(int i=0; i<cur.length(); i++){
+            if(cur.charAt(i) != next.charAt(i))count++; //다른 글자 있으면 ++
+        }
+        if(count==1)return true;
+        else return false;
+    }
+}
