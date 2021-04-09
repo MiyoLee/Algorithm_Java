@@ -1,0 +1,59 @@
+import java.util.*;
+
+class Solution {
+    private static String[] answer;
+    private static boolean[] visited;
+    private static String[] tmpanswer;
+    
+    public String[] solution(String[][] tickets) {
+        answer = new String[10000];
+        
+        visited = new boolean[tickets.length];    //티켓 사용여부 저장할 배열
+        
+        dfs(0, "ICN", new String[10000] ,tickets);
+        
+        int size=0;
+        while(answer[size]!=null)size++;
+        return Arrays.copyOfRange(answer, 0, size);
+    }
+    
+    //사용 티켓수, 현재 공항
+    private static void dfs(int cnt, String cur, String[] selected, String[][] tickets){     
+        selected[cnt]=cur;
+        if(cnt==tickets.length){     //모든 티켓 다 썼다
+            //지금까지보다 알파벳순으로 앞서는지 체크하자          
+            
+			if (answer[0] == null) {
+				answer = Arrays.copyOf(selected,selected.length);
+			}
+				
+			else if (alpha(selected, answer)) {
+				answer = Arrays.copyOf(selected,selected.length);
+			}
+            
+            return;
+        }
+        for(int i=0; i<tickets.length; i++){
+            if(tickets[i][0].equals(cur) && !visited[i]){              
+                visited[i]=true;
+                dfs(cnt+1, tickets[i][1], selected, tickets);
+                visited[i]=false;
+            }
+        }
+    }
+    
+    // a 가 b보다 알파벳 순서로 앞서는지 리턴하는 함수
+    private static boolean alpha(String[]a, String[]b){
+        int size = 0;
+		while (a[size] != null)
+			size++;
+		for (int i = 1; i < size; i++) {
+			if (!a[i].equals(b[i])) {
+				if(a[i].compareTo(b[i]) < 0) return true;
+				else return false;
+			}
+		}
+		return false;
+    }
+ 
+}
