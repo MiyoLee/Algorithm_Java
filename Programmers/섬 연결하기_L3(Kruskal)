@@ -1,0 +1,61 @@
+import java.util.*;
+
+//최소비용 신장 트리 문제.
+//Kruskal로 풀자.
+class Solution {
+    static class Edge implements Comparable<Edge>{
+        private int v1,v2;
+        private int weight;
+        public Edge(int v1, int v2, int weight){
+            this.v1 = v1;
+            this.v2 = v2;
+            this.weight = weight;
+        }
+        @Override
+        public int compareTo(Edge o){
+            return this.weight - o.weight;
+        }
+    }
+    static int[] parents;
+    static PriorityQueue<Edge> edges= new PriorityQueue<>();
+    public int solution(int n, int[][] costs) {
+        int answer = 0;
+        //1. 간선 비용 오름차순 정렬
+        
+        for(int i=0; i<costs.length; i++){
+            edges.offer(new Edge(costs[i][0],costs[i][1],costs[i][2]));
+        }
+        
+        //2. 싸이클이 생기지 않도록 하나씩 선택.
+        parents = new int[n];
+        make(n);
+        
+        while(!edges.isEmpty()){
+            Edge e = edges.poll();
+            if(union(e.v1,e.v2)){
+                answer+=e.weight;
+            }
+        }
+        return answer;
+    }
+    
+    // 각 정점 하나만을 포함한 집합 생성
+    public static void make(int n){
+        for(int i=0; i<n; i++){
+            parents[i]=i;
+        }
+    }
+    // a정점의 루트를 찾는 함수
+    public static int find(int a){
+        if(parents[a] == a)return a;
+        else return (parents[a]=find(parents[a]));
+    }
+    // a가 포함된 집합과 b가 포함된 집합을 합치는 함수.
+    public static boolean union(int a, int b){
+        int aRoot = find(a);
+        int bRoot = find(b);
+        if(aRoot==bRoot)return false;
+        parents[bRoot] = aRoot;
+        return true;
+    }
+}
