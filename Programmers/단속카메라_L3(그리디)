@@ -1,0 +1,47 @@
+import java.util.*;
+class Solution {
+    static class Route implements Comparable<Route>{
+        int start;
+        int end;
+        public Route(int start, int end){
+            this.start = start;
+            this.end = end;
+        }
+        
+        @Override
+        public int compareTo(Route o){
+            return this.end - o.end; 
+        }
+    }
+    
+    static Route[] R;
+    public int solution(int[][] routes) {
+        int answer = 1;
+        
+        R = new Route[routes.length];
+        for(int i=0; i<routes.length; i++){
+            R[i] = new Route(routes[i][0],routes[i][1]);
+        }
+        Arrays.sort(R);
+        // 정렬 완료
+        
+        // 정답 구하기 start
+        int start = R[0].start;      //겹치는 부분의 시작점   
+        int end = R[0].end;        //겹치는 부분의 끝점
+        for(int i=1; i<R.length; i++){
+            if(R[i].start < start) continue;
+            if(R[i].start >= start && R[i].start <= end){
+                start = R[i].start;
+                continue;
+            }
+            if(R[i].start > end){
+                answer++;
+                start = R[i].start;
+                end = R[i].end;
+            }
+        }
+        // 정답 구하기 end
+        
+        return answer;
+    }
+}
