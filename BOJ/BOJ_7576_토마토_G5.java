@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class BOJ_7576_토마토_G1 {
+public class BOJ_7576_토마토_G5 {
 	static int M,N; //가로,세로
 	static int[][] map;	//토마토상자
 	static int[] dr = {-1,0,1,0};	//상좌하우 
